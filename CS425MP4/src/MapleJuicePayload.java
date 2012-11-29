@@ -1,4 +1,5 @@
 import java.util.*;
+//Basic Payload
 public class MapleJuicePayload {
 
 	int           messageType;
