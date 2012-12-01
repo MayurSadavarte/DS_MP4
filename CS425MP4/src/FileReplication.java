@@ -81,6 +81,42 @@ public class FileReplication implements Runnable {
 		return(returnList);
 	}
 	
+	
+	private void sendCOPYMessage(String tNodeID, String rFile, String lFile, String nodeID) {
+		Vector<String> msgList=new Vector<String>();
+		msgList.add("C");
+		msgList.add(rFile);
+		msgList.add(lFile);
+		msgList.add(nodeID);
+					
+		sendListMsg(msgList, tNodeID);
+	}
+	
+	
+	public void sendSDFSGetMessage(String FileID) {
+		//SDFC_GET packet - Opcode + SDFS_FileID + SourceNodeID
+		String opcode = "SDFS_GET";
+		Vector<String> getPacket = new Vector<String>();
+		
+		getPacket.add(opcode);
+		getPacket.add(FileID);
+		getPacket.add(m.myName);
+		
+		sendListMsg(getPacket, m.masterName);
+	}
+	
+	
+	public void sendSDFSPutMessage(String lFileID, String rFileID) {
+		//SDFS_PUT packet - Opcode + Local_FileID + SDFS_FileID + SourceNodeID
+		Vector<String> putMsg = new Vector<String>();
+		putMsg.add("P");
+		putMsg.add(lFileID);
+		putMsg.add(rFileID);
+		putMsg.add(m.myName);
+		
+		sendListMsg(putMsg, m.masterName);
+	}
+	
 	private Vector<String> sort_node_file_map()
 	{
 		Vector<String> keys = new Vector<String>(m.node_file_map.keySet());
@@ -209,14 +245,15 @@ public class FileReplication implements Runnable {
 					if(targetNode == null)
 						break;
 					
-					Vector<String> msgList=new Vector<String>();
+					/*Vector<String> msgList=new Vector<String>();
 					msgList.add("C");
 					msgList.add(tempKey);
 					msgList.add(tempKey);
 					msgList.add(nodeList.firstElement());
 								
 					sendListMsg(msgList, targetNode);
-					
+					*/
+					sendCOPYMessage(targetNode, tempKey, tempKey, nodeList.firstElement());
 					m.file_node_map.get(tempKey).add(targetNode);
 					m.node_file_map.get(targetNode).add(tempKey);
 					
@@ -272,6 +309,7 @@ public class FileReplication implements Runnable {
 				System.out.println("Couldn't find a file which can be replicated");
 				break;
 			}
+			/*
 			Vector<String> cpmsgList=new Vector<String>();
 			cpmsgList.add("C");
 			cpmsgList.add(filetoCopy);
@@ -279,7 +317,8 @@ public class FileReplication implements Runnable {
 			cpmsgList.add(nodetoCopyFrom);
 			
 			sendListMsg(cpmsgList, firstKey);
-			
+			*/
+			sendCOPYMessage(firstKey, filetoCopy, filetoCopy, nodetoCopyFrom);
 			
 			Vector<String> rmmsgList=new Vector<String>();
 			rmmsgList.add("R");
@@ -430,17 +469,20 @@ public class FileReplication implements Runnable {
 								
 								//m.sendMsg(m.filerep_sock, sortedKey.firstElement(), , portN)
 								Vector<String> cpnodes = new Vector<String>();
-								Vector<String> cpMsg = new Vector<String>();
+								/*Vector<String> cpMsg = new Vector<String>();
 								cpMsg.add("C");
 								cpMsg.add(recvList.elementAt(1));
 								cpMsg.add(recvList.elementAt(2));
 								cpMsg.add(recvList.elementAt(3));
 								sendListMsg(cpMsg, sortedKey.elementAt(0));
+								*/
+								sendCOPYMessage(sortedKey.elementAt(0), recvList.elementAt(1), recvList.elementAt(2), recvList.elementAt(3));
 								cpnodes.add(sortedKey.elementAt(0));
 								m.node_file_map.get(sortedKey.elementAt(0)).add(recvList.elementAt(2));
 								if(sortedKey.size()>1) 
 								{
-									sendListMsg(cpMsg, sortedKey.elementAt(1));
+									//sendListMsg(cpMsg, sortedKey.elementAt(1));
+									sendCOPYMessage(sortedKey.elementAt(1), recvList.elementAt(1), recvList.elementAt(2), recvList.elementAt(3));
 									cpnodes.add(sortedKey.elementAt(1));
 									m.node_file_map.get(sortedKey.elementAt(1)).add(recvList.elementAt(2));
 								}
@@ -532,6 +574,38 @@ public class FileReplication implements Runnable {
 								e.printStackTrace();
 							}
 						}
+					
+						else if (recvList.firstElement().equals("SDFS_GET"))
+						{
+							// master receives answer to replication query
+							//SDFC_GET packet - Opcode + SDFS_FileID + SourceNodeID
+							String FileID=null;
+							try {
+								WriteLog.writelog(m.myName, "received SDFS_GET from - "+recvList.elementAt(1));
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							FileID = recvList.elementAt(1);
+							Vector<String> ListNodes = m.file_node_map.get(FileID);
+							String RandomNode = ListNodes.elementAt((int)(Math.random() * ListNodes.size()));
+							
+							sendCOPYMessage(recvList.elementAt(2), FileID, FileID, RandomNode);
+							
+							m.file_node_map.get(FileID).add(RandomNode);
+							m.node_file_map.get(RandomNode).add(FileID);
+						
+							
+							try {
+								WriteLog.writelog(m.myName, "node_file_map after SDFS_GET - "+m.node_file_map.toString());
+								WriteLog.writelog(m.myName, "file_node_map after SDFS_GET - "+m.file_node_map.toString());
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						
 					}
 					
 					
