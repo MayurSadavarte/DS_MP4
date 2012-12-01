@@ -21,6 +21,7 @@ public class Machine {
 	public static final int MEMBERSHIP_PORT = 10001;
 	public static final int FILE_OPERATIONS_PORT = 8891;
 	public static final int FILE_TRANSFER_PORT = 8892;
+	public static final int MAPLE_JUICE_PORT = 8893;
 	public static final int HEARTBEAT_PORT = 8890;
 	public static final int QUERY_PORT = 10000;
 	

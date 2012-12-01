@@ -5,12 +5,19 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.*;
+
+
+
+//Payload types
+
+
 //Basic Payload
 public class MapleJuicePayload implements Serializable{
 	int           messageType;
 	int           messageLength;
 	byte[]        payload;
 	
+	public static final int MapleActionType = 1 ;
 	public MapleJuicePayload(int mt, int ml, byte[] data) {
 		messageType = mt;
 		messageLength = ml;
@@ -38,9 +45,13 @@ public class MapleJuicePayload implements Serializable{
 		ByteArrayInputStream bais = new ByteArrayInputStream(payload);
 		try {
 			ObjectInputStream oos = new ObjectInputStream(bais);
-			MapleAction dummy=null;
+			GenericPayload dummy=null;
 			try {
-				dummy = (MapleAction)oos.readObject();
+				//switch messageType:
+					//case MapleActionType:
+						//dummy 
+				dummy = (GenericPayload)oos.readObject();
+				dummy.printContents();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
