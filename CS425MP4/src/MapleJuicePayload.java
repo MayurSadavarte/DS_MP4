@@ -13,6 +13,10 @@ import java.util.*;
 
 //Basic Payload
 public class MapleJuicePayload implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5737470900117994737L;
 	int           messageType;
 	int           messageLength;
 	byte[]        payload;
