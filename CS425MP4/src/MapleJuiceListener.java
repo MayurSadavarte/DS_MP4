@@ -4,11 +4,14 @@ import java.net.Socket;
 
 
 public class MapleJuiceListener implements Runnable {
-
+    private Machine m;
 	public void start()
 	{
 		Thread server_thread = new Thread(this);
 		server_thread.start();
+	}
+	public MapleJuiceListener(Machine machine) {
+		m = machine;
 	}
 	@Override
 	public void run() {
