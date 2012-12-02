@@ -22,6 +22,7 @@ public class MapleJuicePayload implements Serializable{
 		messageType = mt;
 		messageLength = ml;
 		payload = data;
+		
 	}
 	
 	public byte[] getByteArray(Object originalObject) {
@@ -46,11 +47,13 @@ public class MapleJuicePayload implements Serializable{
 		try {
 			ObjectInputStream oos = new ObjectInputStream(bais);
 			GenericPayload dummy=null;
+			MapleAction maple_action=null;
 			try {
 				//switch messageType:
 					//case MapleActionType:
 						//dummy 
-				dummy = (GenericPayload)oos.readObject();
+				maple_action  = (MapleAction)oos.readObject();
+				dummy = maple_action;
 				dummy.printContents();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
