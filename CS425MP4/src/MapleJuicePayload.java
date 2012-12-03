@@ -18,14 +18,14 @@ public class MapleJuicePayload implements Serializable{
 	 */
 	private static final long serialVersionUID = 5737470900117994737L;
 	String           messageType;
-	int           messageLength;
+	//int           messageLength;
 	byte[]        payload;
 	
 
 	public static final int MapleActionType = 1 ;
-	public MapleJuicePayload(String mt, int ml, byte[] data) {
+	public MapleJuicePayload(String mt, byte[] data) {
 		messageType = mt;
-		messageLength = ml;
+		//messageLength = ml;
 		payload = data;
 		
 	}
