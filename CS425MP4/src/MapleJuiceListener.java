@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class MapleJuiceListener implements Runnable {
 
 	private Machine m;
+	public static int task_id;
 	public void start()
 	{
 		Thread server_thread = new Thread(this);
@@ -15,21 +16,34 @@ public class MapleJuiceListener implements Runnable {
 	}
 	public MapleJuiceListener(Machine machine) {
 		m = machine;
+		task_id = 0;
 	}
 	@SuppressWarnings("unchecked")
 	public void processMapleCommand(String mapleExe, Vector<String> filesToProcess, String outputFilePrefix) {
-		@SuppressWarnings("rawtypes")
+		@SuppressWarnings("rawtypes")		
 		ArrayList[] nodeFileList = new ArrayList[m.memberList.size()];
 		for (int i = 0 ; i < m.memberList.size(); i++) {
 			nodeFileList[i] = new ArrayList<String>();
 
 		}
 		int i = 0;
+		task_id++;
 		for (String fileName : filesToProcess) {
 			nodeFileList[i].add(fileName);
 			i = (i + 1) % m.memberList.size();
 
 		}
+		for (int j = 0 ; j < m.memberList.size(); j++) {
+			MapleAction temp = new MapleAction();
+			temp.mapleTaskId = task_id;
+			temp.machineId = j + 1;
+			temp.mapleExe = mapleExe;
+			temp.inputFileInfo = nodeFileList[j];
+			temp.outputFilePrefix = outputFilePrefix;
+			MapleJuicePayload mj_payload = new MapleJuicePayload(1, temp.getByteArray(this));
+			//mj_payload.sendToNode(m.memberList.elementAt(j));
+		}
+		
 
 
 	}
