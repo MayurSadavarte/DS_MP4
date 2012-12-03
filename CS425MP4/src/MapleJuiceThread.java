@@ -8,9 +8,12 @@ import java.net.UnknownHostException;
 
 public class MapleJuiceThread implements Runnable {
 	Socket sock;
-	public MapleJuiceThread(Socket s) {
+	Machine machine;
+	
+	public MapleJuiceThread(Socket s, Machine m) {
 		// TODO Auto-generated constructor stub
 		sock = s;
+		machine = m;
 	}
 	public void start()
 	{
@@ -22,6 +25,7 @@ public class MapleJuiceThread implements Runnable {
 	public void run(){
 		try {
 			ObjectInputStream ois = null;
+			GenericPayload generic_action=null;
 			try {
 				ois = new ObjectInputStream(sock.getInputStream());
 			} catch (IOException e) {
@@ -36,7 +40,12 @@ public class MapleJuiceThread implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			mjPayload.parseByteArray();
+			if (mjPayload.messageType.equalsIgnoreCase("MapleTask")) {
+				MapleAction maple_action=null;
+				generic_action = mjPayload.parseByteArray();
+				maple_action = (MapleAction)generic_action;
+				((MapleAction)maple_action).processMapleActionPayload(machine);
+			}
 			//ois.close();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

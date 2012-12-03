@@ -17,19 +17,19 @@ public class MapleJuicePayload implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 5737470900117994737L;
-	int           messageType;
+	String           messageType;
 	int           messageLength;
 	byte[]        payload;
 	
-	public static final int MapleActionType = 1 ;
-	public MapleJuicePayload(int mt, int ml, byte[] data) {
+	//public static final int MapleActionType = 1 ;
+	public MapleJuicePayload(String mt, int ml, byte[] data) {
 		messageType = mt;
 		messageLength = ml;
 		payload = data;
 		
 	}
 	
-	public byte[] getByteArray(Object originalObject) {
+	public void setByteArray(Object originalObject) {
 		//byte[] op = new byte[1016];
 		ByteArrayOutputStream baos=null;
 		ObjectOutputStream oos=null;
@@ -43,22 +43,25 @@ public class MapleJuicePayload implements Serializable{
 			e.printStackTrace();
 		}
 		
-		return(baos.toByteArray());
+		payload = baos.toByteArray();
 	}
 	
-	public void parseByteArray() {
+	public GenericPayload parseByteArray() {
 		ByteArrayInputStream bais = new ByteArrayInputStream(payload);
+		GenericPayload generic_action = null;
 		try {
 			ObjectInputStream oos = new ObjectInputStream(bais);
 			GenericPayload dummy=null;
-			MapleAction maple_action=null;
 			try {
-				//switch messageType:
-					//case MapleActionType:
-						//dummy 
-				maple_action  = (MapleAction)oos.readObject();
-				dummy = maple_action;
-				dummy.printContents();
+				if(messageType.equalsIgnoreCase("MapleTask")) {
+					MapleAction maple_action  = (MapleAction)oos.readObject();
+					maple_action.printContents();
+					generic_action=(GenericPayload)maple_action;
+					//dummy = (GenericPayload) maple_action;
+					//dummy.printContents();
+				} else {
+					//TODO multiple packet formats will come here
+				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -80,6 +83,10 @@ public class MapleJuicePayload implements Serializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return generic_action;
+	}
+	
+	public void sendMapleJuicePacket(String targetNode) {
 		
 	}
 }

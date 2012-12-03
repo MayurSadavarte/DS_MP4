@@ -5,8 +5,12 @@ import java.io.*;
 
 
 //Payload for sending Maple Action Payload to worker nodes
-public class MapleAction extends GenericPayload {
+public class MapleAction extends GenericPayload implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	int             mapleTaskId;
 	int             machineId;
 	String              mapleExe;
@@ -16,6 +20,7 @@ public class MapleAction extends GenericPayload {
 	/*public MapleAction(Machine machine) {
 		m = machine;
 	}*/
+	@Override
 	public void printContents()
 	{
 		System.out.println(mapleTaskId);

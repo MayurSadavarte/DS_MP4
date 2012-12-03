@@ -197,6 +197,7 @@ public class Machine {
 	
 	public void startMapleJuiceListener() {
 		mapleJuiceListener = new MapleJuiceListener(this);
+		mapleJuiceListener.start();
 	}
 	
 	

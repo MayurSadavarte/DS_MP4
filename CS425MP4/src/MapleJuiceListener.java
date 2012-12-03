@@ -37,6 +37,8 @@ public class MapleJuiceListener implements Runnable {
 
 	public void processJuiceCommand(String sdfsExe, int num_reducers, String outputsdfsFileName, String outputFilePrefix) {
 	}
+	
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
