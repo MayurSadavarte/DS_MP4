@@ -42,7 +42,7 @@ public class MapleJuiceListener implements Runnable {
 			temp.outputFilePrefix = outputFilePrefix;
 			MapleJuicePayload mj_payload = new MapleJuicePayload("MapleTask");
 			mj_payload.setByteArray(temp);
-			//mj_payload.sendToNode(m.memberList.elementAt(j));
+			mj_payload.sendMapleJuicePacket(m.memberList.elementAt(j));
 		}
 		
 
