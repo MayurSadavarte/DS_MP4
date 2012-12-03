@@ -23,10 +23,10 @@ public class MapleJuicePayload implements Serializable{
 	
 
 	public static final int MapleActionType = 1 ;
-	public MapleJuicePayload(String mt, byte[] data) {
+	public MapleJuicePayload(String mt) {
 		messageType = mt;
 		//messageLength = ml;
-		payload = data;
+		//payload = data;
 		
 	}
 	
@@ -90,4 +90,9 @@ public class MapleJuicePayload implements Serializable{
 	public void sendMapleJuicePacket(String targetNode) {
 		
 	}
+
+
+
+
+
 }
