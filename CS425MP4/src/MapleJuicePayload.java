@@ -66,7 +66,7 @@ public class MapleJuicePayload implements Serializable{
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}, 
 			/*mapleTaskId = dummy.mapleTaskId;
 			machineId = dummy.machineId;
 			mapleExe = dummy.mapleExe;
@@ -88,11 +88,6 @@ public class MapleJuicePayload implements Serializable{
 	}
 	
 	public void sendMapleJuicePacket(String targetNode) {
-		
+		MapleJuiceClient mapleJuiceClient = new MapleJuiceClient(this, targetNode);
 	}
-
-
-
-
-
 }
