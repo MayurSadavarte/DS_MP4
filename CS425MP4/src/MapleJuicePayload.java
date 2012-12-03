@@ -21,7 +21,8 @@ public class MapleJuicePayload implements Serializable{
 	int           messageLength;
 	byte[]        payload;
 	
-	//public static final int MapleActionType = 1 ;
+
+	public static final int MapleActionType = 1 ;
 	public MapleJuicePayload(String mt, int ml, byte[] data) {
 		messageType = mt;
 		messageLength = ml;
