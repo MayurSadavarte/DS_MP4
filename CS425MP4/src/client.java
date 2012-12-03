@@ -56,14 +56,26 @@ public class client {
 				System.exit(0);
 			}
 			else if(cmd.startsWith("put ")){
+				Scanner lineScanner = new Scanner(cmd);
+				String command, localFileName, sdfsFileName;
+				
+				command = lineScanner.next();
+				localFileName = lineScanner.next();
+				sdfsFileName = lineScanner.next();
 				
 				Vector<String> putMsg = new Vector<String>();
+				
 				putMsg.add("P");
-				putMsg.add(cmd.substring(4, cmd.indexOf(' ', 4)));
-				putMsg.add(cmd.substring(cmd.lastIndexOf(' ')+1));
+				putMsg.add(localFileName);
+				putMsg.add(sdfsFileName);
 				putMsg.add(myName);
-				WriteLog.writelog(myName, "sendPutMsg:"+putMsg.elementAt(1)+putMsg.elementAt(2));
-				byte[] mList = null;
+				
+//				putMsg.add(cmd.substring(4, cmd.indexOf(' ', 4)));
+//				putMsg.add(cmd.substring(cmd.lastIndexOf(' ')+1));
+//				putMsg.add(myName);
+				
+				WriteLog.writelog(myName, "sendPutMsg:" + putMsg.elementAt(1)+putMsg.elementAt(2));
+/*				byte[] mList = null;
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			    try {
 			    	ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -76,17 +88,28 @@ public class client {
 			    	e.printStackTrace();
 			    }
 				
-				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT);
+				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT); */
+				
+				sendMsgToMaster(putMsg, masterIP);
 				//String sourceFN = cmd.substring(4, cmd.indexOf(' ', 4));
 				//server.setSource(sourceFN);
 			}
 			else if(cmd.startsWith("get ")){
 				Vector<String> getMsg = new Vector<String>();
+				Scanner lineScanner = new Scanner(cmd);
+				String command, localFileName, sdfsFileName;
+				
+				command = lineScanner.next();
+				sdfsFileName = lineScanner.next();
+				localFileName = lineScanner.next();
+				
 				getMsg.add("G");
-				getMsg.add(cmd.substring(4, cmd.indexOf(' ', 4)));
+//				getMsg.add(cmd.substring(4, cmd.indexOf(' ', 4)));
+				getMsg.add(sdfsFileName);
 				getMsg.add(myName);
+				
 				WriteLog.writelog(myName, "sendPutMsg:"+getMsg.elementAt(1));
-				byte[] mList = null;
+/*				byte[] mList = null;
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			    try {
 			    	ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -99,24 +122,35 @@ public class client {
 			    	e.printStackTrace();
 			    }
 				
-				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT);
+				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT); */
+				sendMsgToMaster(getMsg, masterIP);
 				Vector<String> serverIP = recvListMsg();
-				String copyFN = cmd.substring(cmd.lastIndexOf(' ')+1);
+				//String copyFN = cmd.substring(cmd.lastIndexOf(' ')+1);
 				
-				Runnable runnable = new FileTransferClient(copyFN, cmd.substring(4, cmd.indexOf(' ', 4)),serverIP.elementAt(0));
+				//Runnable runnable = new FileTransferClient(copyFN, cmd.substring(4, cmd.indexOf(' ', 4)),serverIP.elementAt(0));
+				Runnable runnable = new FileTransferClient(localFileName, sdfsFileName,serverIP.elementAt(0));
+
 				Thread thread = new Thread(runnable);
 				thread.start();
 			}
 			else if(cmd.startsWith("delete ")){
-				Vector<String> getMsg = new Vector<String>();
-				getMsg.add("D");
-				getMsg.add(cmd.substring(7));
-				WriteLog.writelog(myName, "sendPutMsg:"+getMsg.elementAt(1));
-				byte[] mList = null;
+				Vector<String> delMsg = new Vector<String>();
+
+				Scanner lineScanner = new Scanner(cmd);
+				String command, localFileName, sdfsFileName;
+				
+				command = lineScanner.next();
+				sdfsFileName = lineScanner.next();
+				
+				delMsg.add("D");
+				delMsg.add(sdfsFileName);
+				
+				WriteLog.writelog(myName, "sendPutMsg: " + delMsg.elementAt(1));
+/*				byte[] mList = null;
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			    try {
 			    	ObjectOutputStream oos = new ObjectOutputStream(baos);
-			    	oos.writeObject(getMsg);
+			    	oos.writeObject(delMsg);
 			    	oos.flush();
 			    	
 			    	// get the byte array of the object
@@ -125,14 +159,118 @@ public class client {
 			    	e.printStackTrace();
 			    }
 				
-				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT);
+				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT); */
+				sendMsgToMaster(delMsg, masterIP);
 			}
 			else if(cmd.startsWith("updateMaster ")){
 				masterIP = cmd.substring(cmd.lastIndexOf(' ')+1);
 				System.out.println("New master - "+masterIP);
 			}
+			else if(cmd.startsWith("maple ")) {
+
+				Vector<String> mapleMsg = new Vector<String>();
+				Vector<String> putMsg = new Vector<String>();
+				Scanner lineScanner = new Scanner(cmd);
+				String command, jarName, sdfsFilePrefix;
+				Vector<String> sdfsFiles = new Vector<String>();
+				
+ 				command = lineScanner.next();
+				jarName = lineScanner.next();
+				sdfsFilePrefix = lineScanner.next();
+				
+				putMsg.add("P");
+				putMsg.add(jarName);
+				putMsg.add(jarName);
+				
+				sendMsgToMaster(putMsg, masterIP);
+				
+				while(lineScanner.hasNext()){
+					sdfsFiles.add(lineScanner.next());
+				}
+				
+				mapleMsg.add("maple");
+				mapleMsg.add(jarName);
+				mapleMsg.add(sdfsFilePrefix);
+				
+				for(String sdfsFile : sdfsFiles) {
+					mapleMsg.add(sdfsFile);
+				}
+				
+/*				WriteLog.writelog(myName, "sendMapleMsg: " + mapleMsg.elementAt(1));
+				byte[] mList = null;
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			    try {
+			    	ObjectOutputStream oos = new ObjectOutputStream(baos);
+			    	oos.writeObject(mapleMsg);
+			    	oos.flush();
+			    	
+			    	// get the byte array of the object
+			    	mList = baos.toByteArray();
+			    } catch(IOException e) {
+			    	e.printStackTrace();
+			    }
+				
+				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT); */
+				
+				sendMsgToMaster(mapleMsg, masterIP);
+				
+			}else if(cmd.startsWith("juice ")) {
+				Vector<String> juiceMsg = new Vector<String>();
+				Scanner lineScanner = new Scanner(cmd);
+				String command, jarName, sdfsFilePrefix, juiceFileName;
+				Integer numJuices;
+				
+ 				command = lineScanner.next();
+				jarName = lineScanner.next();
+				numJuices = lineScanner.nextInt();
+				sdfsFilePrefix = lineScanner.next();
+				juiceFileName = lineScanner.next();
+								
+				juiceMsg.add("maple");
+				juiceMsg.add(jarName);
+				juiceMsg.add(numJuices.toString());
+				juiceMsg.add(sdfsFilePrefix);
+				juiceMsg.add(juiceFileName);
+				
+				WriteLog.writelog(myName, "sendJuiceMsg: " + juiceMsg.elementAt(1));
+				/*byte[] mList = null;
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			    try {
+			    	ObjectOutputStream oos = new ObjectOutputStream(baos);
+			    	oos.writeObject(juiceMsg);
+			    	oos.flush();
+			    	
+			    	// get the byte array of the object
+			    	mList = baos.toByteArray();
+			    } catch(IOException e) {
+			    	e.printStackTrace();
+			    }
+				
+				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT); */
+				
+				sendMsgToMaster(juiceMsg, masterIP);
+			}
 			
 		}
+
+	}
+	
+	private static void sendMsgToMaster(Vector<String> message, String masterIP) {
+		
+		byte[] mList = null;
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    try {
+	    	ObjectOutputStream oos = new ObjectOutputStream(baos);
+	    	oos.writeObject(message);
+	    	oos.flush();
+	    	
+	    	// get the byte array of the object
+	    	mList = baos.toByteArray();
+	    } catch(IOException e) {
+	    	e.printStackTrace();
+	    }
+		
+		sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT);
 
 	}
 	
