@@ -117,6 +117,7 @@ public class FileReplication implements Runnable {
 		sendListMsg(putMsg, m.masterName);
 	}
 	
+	
 	private Vector<String> sort_node_file_map()
 	{
 		Vector<String> keys = new Vector<String>(m.node_file_map.keySet());
@@ -502,17 +503,17 @@ public class FileReplication implements Runnable {
 						else if (recvList.firstElement().equals("G"))
 						{
 							// master receiving GET
+							// GET sdfc_file client_name
 							// find primary machine
 							// send setSource msg to primary machine
 							if(!m.file_node_map.containsKey(recvList.elementAt(1))){
 								System.out.println("file doesn.t exist");
-							}else{
+							} else {
 								String primaryM = m.file_node_map.get(recvList.elementAt(1)).elementAt(0);
 							
 							Vector<String> cpMsg = new Vector<String>();
 							cpMsg.add(primaryM);
 							sendListMsg(cpMsg, recvList.elementAt(2));	
-								
 							}
 						}
 						else if (recvList.firstElement().equals("D"))
@@ -606,12 +607,54 @@ public class FileReplication implements Runnable {
 							}
 						}
 						
+						else if (recvList.firstElement().equalsIgnoreCase("MAPLE"))
+						{
+							/*
+							 * Maple sdfs_exe sdfs_prefix sdfs_files 
+							 */
+						
+							String sdfs_exe = recvList.elementAt(1);
+							String sdfs_prefix = recvList.elementAt(2);
+							int length = recvList.size();
+							//TODO: might crash here becoz of ArryOutOfIndexException...great if works without that!!
+							Vector<String> sdfs_files = (Vector<String>) recvList.subList(3, length+1);
+						
+							//make sure that all the sdfc_files are already existing in file_system
+							for (String tfile: sdfs_files) {
+								if(!m.file_node_map.containsKey(tfile)) {
+									WriteLog.writelog(m.myName, "file_node_map doesn't contain "+ tfile);
+									System.exit(-1);
+								}
+							}
+							
+							WriteLog.writelog(m.myName, "Received MAPLE commnd from client");
+						}
+						
+						else if (recvList.firstElement().equalsIgnoreCase("JUICE"))
+						{
+							/*
+							 * JUICE sdfs_exe num_juices sdfs_prefix sdfs_file 
+							 */
+						
+							String sdfs_exe = recvList.elementAt(1);
+							String no_juices = recvList.elementAt(2);
+							String sdfs_prefix = recvList.elementAt(3);
+							String sdfs_file = recvList.elementAt(4);
+							
+							Integer no_reduce = Integer.valueOf(no_juices);
+							
+							WriteLog.writelog(m.myName, "Received MAPLE commnd from client");
+							//make sure that all the sdfc_files are already existing in file_system
+							
+							
+						}
 					}
 					
 					
 						if (recvList.firstElement().equals("C"))
 						{
-						// machine receiving COPY 
+							//machine receiving COPY
+							//COPY file_name sdfs_file node_id 
 							String copyFN = recvList.elementAt(2);
 							String serverIP = recvList.elementAt(3);//TODO get client ip
 							
