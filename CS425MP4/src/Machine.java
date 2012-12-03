@@ -33,6 +33,7 @@ public class Machine {
 	public String masterName;
 	public boolean master = false;
 	public FileReplication FileReplicator;
+	public MapleJuiceListener mapleJuiceListener;
 	
 	public Machine(boolean mflag) {
 		master = mflag;
@@ -192,6 +193,10 @@ public class Machine {
 		
 		FileReplicator = new FileReplication(this);
 		FileReplicator.start();
+	}
+	
+	public void startMapleJuiceListener() {
+		mapleJuiceListener = new MapleJuiceListener(this);
 	}
 	
 	

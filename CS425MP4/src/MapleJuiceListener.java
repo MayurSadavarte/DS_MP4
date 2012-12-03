@@ -4,7 +4,8 @@ import java.net.Socket;
 
 
 public class MapleJuiceListener implements Runnable {
-    private Machine m;
+    @SuppressWarnings("unused")
+	private Machine m;
 	public void start()
 	{
 		Thread server_thread = new Thread(this);
@@ -16,7 +17,7 @@ public class MapleJuiceListener implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		ServerSocket servsock=null;
+		ServerSocket servsock = null;
 		try {
 			servsock = new ServerSocket(Machine.MAPLE_JUICE_PORT);
 		} catch (IOException e1) {

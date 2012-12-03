@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.*;
 import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -17,6 +18,9 @@ public class MapleJuiceThread implements Runnable {
 		thread.start();
 	}
 
+	public void processMapleJuiceCommand(Machine machine, String mapleExe, String[] filesToProcess, String[] outputFilePrefix) {
+		//ArrayList<String>[] nodeFileList = new ArrayList<String> [machine.memberList.size()])();
+	}
 	public void run(){
 		try {
 			ObjectInputStream ois = null;
@@ -27,14 +31,14 @@ public class MapleJuiceThread implements Runnable {
 				e.printStackTrace();
 			}
 
-			//MapleJuicePayload mjPayload;
-			/*try {
-				//mjPayload = (ois.readObject());
+			MapleJuicePayload mjPayload = null;
+			try {
+				mjPayload = (MapleJuicePayload)(ois.readObject());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
-			//mjPayload.parseByteArray();
+			}
+			mjPayload.parseByteArray();
 			//ois.close();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
