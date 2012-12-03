@@ -18,9 +18,7 @@ public class MapleJuiceThread implements Runnable {
 		thread.start();
 	}
 
-	public void processMapleJuiceCommand(Machine machine, String mapleExe, String[] filesToProcess, String[] outputFilePrefix) {
-		//ArrayList<String>[] nodeFileList = new ArrayList<String> [machine.memberList.size()])();
-	}
+
 	public void run(){
 		try {
 			ObjectInputStream ois = null;

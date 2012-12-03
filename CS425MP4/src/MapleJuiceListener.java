@@ -1,10 +1,12 @@
 import java.io.IOException;
+import java.util.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 
 public class MapleJuiceListener implements Runnable {
-    @SuppressWarnings("unused")
+
 	private Machine m;
 	public void start()
 	{
@@ -13,6 +15,27 @@ public class MapleJuiceListener implements Runnable {
 	}
 	public MapleJuiceListener(Machine machine) {
 		m = machine;
+	}
+	@SuppressWarnings("unchecked")
+	public void processMapleCommand(String mapleExe, Vector<String> filesToProcess, String outputFilePrefix) {
+		@SuppressWarnings("rawtypes")
+		ArrayList[] nodeFileList = new ArrayList[m.memberList.size()];
+		for (int i = 0 ; i < m.memberList.size(); i++) {
+			nodeFileList[i] = new ArrayList<String>();
+
+		}
+		int i = 0;
+		for (String fileName : filesToProcess) {
+			nodeFileList[i].add(fileName);
+			i = (i + 1) % m.memberList.size();
+
+		}
+
+
+	}
+
+
+	public void processJuiceCommand(String sdfsExe, int num_reducers, String outputsdfsFileName, String outputFilePrefix) {
 	}
 	@Override
 	public void run() {
@@ -24,32 +47,32 @@ public class MapleJuiceListener implements Runnable {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		while(true){
-		
+
 			try{
-				
-			    
-			      System.out.println("Waiting...");
-	
-			      Socket sock = servsock.accept();
-			      System.out.println("Accepted connection : " + sock);
-			      
-			      
-			      
-			      MapleJuiceThread mj_thread = new MapleJuiceThread(sock);
-			      mj_thread.start();
-			      // sendfile
-			     
-			      
-			    
+
+
+				System.out.println("Waiting...");
+
+				Socket sock = servsock.accept();
+				System.out.println("Accepted connection : " + sock);
+
+
+
+				MapleJuiceThread mj_thread = new MapleJuiceThread(sock);
+				mj_thread.start();
+				// sendfile
+
+
+
 			}catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-	
-		
+
+
 	}
 
 }
