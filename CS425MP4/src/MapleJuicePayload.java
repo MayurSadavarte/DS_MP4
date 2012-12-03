@@ -88,6 +88,12 @@ public class MapleJuicePayload implements Serializable{
 	}
 	
 	public void sendMapleJuicePacket(String targetNode) {
+		try {
+			WriteLog.writelog(Machine.stName, "Sent MapleJuicePaylot to "+targetNode);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		MapleJuiceClient mapleJuiceClient = new MapleJuiceClient(this, targetNode);
 		mapleJuiceClient.start();
 	}
