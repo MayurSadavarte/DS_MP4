@@ -77,7 +77,7 @@ public class MapleJuiceListener implements Runnable {
 
 
 
-				MapleJuiceThread mj_thread = new MapleJuiceThread(sock);
+				MapleJuiceThread mj_thread = new MapleJuiceThread(sock, m);
 				mj_thread.start();
 				// sendfile
 
