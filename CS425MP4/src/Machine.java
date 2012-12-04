@@ -95,7 +95,9 @@ public class Machine {
 			ByteArrayInputStream bais = new ByteArrayInputStream(recvData);
 		
 			ObjectInputStream ois = new ObjectInputStream(bais);
+			
 			memberList = (Vector<String>)ois.readObject();
+			WriteLog.writelog(myName, "Received member list " + memberList + " from "+recvPacket.getSocketAddress());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

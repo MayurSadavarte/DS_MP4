@@ -9,12 +9,15 @@ public class MapleJuiceListener implements Runnable {
 
 	private Machine m;
 	public static int task_id;
+	public static HashMap<Integer , HashMap<String, Process>> task_map; 
 	public void start()
 	{
 		Thread server_thread = new Thread(this);
+		
 		server_thread.start();
 	}
 	public MapleJuiceListener(Machine machine) {
+		task_map = new HashMap<Integer, HashMap<String, Process>>();
 		m = machine;
 		task_id = 0;
 	}
@@ -42,7 +45,7 @@ public class MapleJuiceListener implements Runnable {
 			temp.outputFilePrefix = outputFilePrefix;
 			MapleJuicePayload mj_payload = new MapleJuicePayload("MapleTask");
 			mj_payload.setByteArray(temp);
-			//mj_payload.sendToNode(m.memberList.elementAt(j));
+			mj_payload.sendMapleJuicePacket(m.memberList.elementAt(j));
 		}
 		
 

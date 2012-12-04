@@ -11,10 +11,10 @@ public class MapleAction extends GenericPayload implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	int             mapleTaskId;
-	int             machineId;
+	int                 mapleTaskId;
+	int                 machineId;
 	String              mapleExe;
-	ArrayList<String> inputFileInfo;
+	ArrayList<String>   inputFileInfo;
 	String              outputFilePrefix; 
 	//@Override
 	/*public MapleAction(Machine machine) {
@@ -32,22 +32,24 @@ public class MapleAction extends GenericPayload implements Serializable{
 			machine.FileReplicator.sendSDFSGetMessage(fileInfo);
 		}
 		//TODO : Synchronization
-		ArrayList<Process> processList = new ArrayList<Process>();
+		HashMap<String, Process> processList = new HashMap<String, Process>();
 
 		for (String fileInfo : inputFileInfo) {
 			Process temp;
 			try {
 				temp = Runtime.getRuntime().exec("java " + mapleExe + " " + fileInfo);
-				processList.add(temp);
+				processList.put(fileInfo, temp);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		}
+		MapleJuiceListener.task_map.put(new Integer(mapleTaskId), new HashMap<String, Process>(processList));
 		int index = 0;
-		for (Process temp : processList) {
+		for (String fileName  : processList.keySet()) {
 			try {
+				Process temp = processList.get(fileName);
 				index++;
 				temp.waitFor();
 				int result = temp.exitValue();
