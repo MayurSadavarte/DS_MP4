@@ -181,7 +181,8 @@ public class client {
 				putMsg.add("P");
 				putMsg.add(jarName);
 				putMsg.add(jarName);
-
+				putMsg.add(myName);
+				
 				sendMsgToMaster(putMsg, masterIP);
 
 				while(lineScanner.hasNext()){
