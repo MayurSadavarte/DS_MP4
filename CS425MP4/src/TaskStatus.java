@@ -18,7 +18,8 @@ import java.util.HashMap;
 		   		HashMap <String, Process> temp = MapleJuiceListener.task_map.get(taskId);
 		   		
 		   		for (String fileName : temp.keySet()) {
-		   			
+		   			Process tempProcess = temp.get(fileName);
+		   			//if (tempProcess.exitValue())
 		   		}
 		   	}
 			//for (Integer task_id: MapleJuiceListener.task_map.keySet()) {

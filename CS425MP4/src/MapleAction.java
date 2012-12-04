@@ -27,9 +27,14 @@ public class MapleAction extends GenericPayload implements Serializable{
 	}
 	public void processMapleActionPayload(Machine machine) {
 		//TODO : Mayur Get the exe and the files from SDFS
-		machine.FileReplicator.sendSDFSGetMessage(mapleExe);
+		if (!machine.myFileList.contains(mapleExe)) {
+			machine.FileReplicator.sendSDFSGetMessage(mapleExe);
+		}
 		for (String fileInfo : inputFileInfo) {
-			machine.FileReplicator.sendSDFSGetMessage(fileInfo);
+			if (!machine.myFileList.contains(mapleExe)) {
+				machine.FileReplicator.sendSDFSGetMessage(fileInfo);
+			}
+			//machine.FileReplicator.sendSDFSGetMessage(fileInfo);
 		}
 		//TODO : Synchronization
 		HashMap<String, Process> processList = new HashMap<String, Process>();
