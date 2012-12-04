@@ -620,8 +620,8 @@ public class FileReplication implements Runnable {
 						String sdfs_exe = recvList.elementAt(1);
 						String sdfs_prefix = recvList.elementAt(2);
 						int length = recvList.size();
-						Vector<String> sdfs_files = (Vector<String>) recvList.subList(3, length);
-						sdfs_files.add(recvList.elementAt(length));
+						Vector<String> sdfs_files = new Vector<String>(recvList.subList(3, length));
+						//sdfs_files.add(recvList.elementAt(length));
 
 						//make sure that all the sdfc_files are already existing in file_system
 						for (String tfile: sdfs_files) {
