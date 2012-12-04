@@ -247,6 +247,7 @@ public class Machine {
 		}
 
 		m.startFileReplication();
+		m.startMapleJuiceListener();
 		
 		try {
 			WriteLog.printList2Log(m.myName, m.memberList);
