@@ -102,7 +102,9 @@ public class FileReplication implements Runnable {
 		getPacket.add(FileID);
 		getPacket.add(m.myName);
 
+		//TODO - update myFileList, return only when file transfer completes
 		sendListMsg(getPacket, m.masterName);
+		
 	}
 
 

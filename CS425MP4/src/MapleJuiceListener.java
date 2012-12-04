@@ -36,7 +36,7 @@ public class MapleJuiceListener implements Runnable {
 			i = (i + 1) % m.memberList.size();
 
 		}
-		for (int j = 0 ; j < m.memberList.size(); j++) {
+		for (int j = 0 ; ((j < m.memberList.size()) && (nodeFileList[j].size()>0)); j++) {
 			MapleAction temp = new MapleAction();
 			temp.mapleTaskId = task_id;
 			temp.machineId = j + 1;

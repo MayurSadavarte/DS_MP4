@@ -10,7 +10,7 @@ public class MapleJuiceClient implements Runnable {
 		this.payload = payload;
 	}
 	
-	public void start() {
+	public void send() {
 		Thread thread = new Thread(this);
 		thread.start();
 		return;
