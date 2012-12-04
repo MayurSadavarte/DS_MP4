@@ -28,6 +28,7 @@ public class ContactAddRemove implements Runnable {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    try {
 	    	ObjectOutputStream oos = new ObjectOutputStream(baos);
+	    	WriteLog.writelog(m.myName, "Sending memberList - "+m.memberList+ "to "+ip_addr);
 	    	oos.writeObject(m.memberList);
 	    	oos.flush();
 	    	//TODO - need to decide whether we need to send length also in first packet and then actual packet

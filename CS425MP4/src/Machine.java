@@ -30,6 +30,7 @@ public class Machine {
 	public DatagramSocket filerep_sock;
 	public Vector<String> memberList;
 	public String myName;
+	static String stName;
 	public String masterName;
 	public boolean master = false;
 	public FileReplication FileReplicator;
@@ -213,6 +214,7 @@ public class Machine {
 		} else {
 			m = new Machine();
 		}
+		stName = m.myName;
 		m.memberList = new Vector<String>();
 		m.myFileList = new Vector<String>();
 		

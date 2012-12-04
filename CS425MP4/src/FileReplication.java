@@ -509,10 +509,14 @@ public class FileReplication implements Runnable {
 						if(!m.file_node_map.containsKey(recvList.elementAt(1))){
 							System.out.println("file doesn.t exist");
 						} else {
-							String primaryM = m.file_node_map.get(recvList.elementAt(1)).elementAt(0);
+							//String primaryM = m.file_node_map.get(recvList.elementAt(1)).elementAt(0);
+							String FileID = recvList.elementAt(1);
+							Vector<String> ListNodes = m.file_node_map.get(FileID);
+							String RandomNode = ListNodes.elementAt((int)(Math.random() * ListNodes.size()));
 
+							
 							Vector<String> cpMsg = new Vector<String>();
-							cpMsg.add(primaryM);
+							cpMsg.add(RandomNode);
 							sendListMsg(cpMsg, recvList.elementAt(2));	
 						}
 					}
@@ -616,8 +620,8 @@ public class FileReplication implements Runnable {
 						String sdfs_exe = recvList.elementAt(1);
 						String sdfs_prefix = recvList.elementAt(2);
 						int length = recvList.size();
-						//TODO: might crash here becoz of ArryOutOfIndexException...great if works without that!!
-						Vector<String> sdfs_files = (Vector<String>) recvList.subList(3, length+1);
+						Vector<String> sdfs_files = (Vector<String>) recvList.subList(3, length);
+						sdfs_files.add(recvList.elementAt(length));
 
 						//make sure that all the sdfc_files are already existing in file_system
 						for (String tfile: sdfs_files) {
