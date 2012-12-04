@@ -55,7 +55,11 @@ public class FileTransServerThread implements Runnable {
 	      
 	      do {
 	    	  current = bis.read(mybytearray,0,mybytearray.length);
-	    	  os.write(mybytearray,0,current);
+	    	  try {
+	    		  os.write(mybytearray,0,current);
+	    	  } catch (ArrayIndexOutOfBoundsException e) {
+	    		  System.out.println("current - "+current);
+	    	  }
 	    	  bytesWritten = bytesWritten + current;
 	    	  flength = flength - current;
 	      } while(flength > 0);
