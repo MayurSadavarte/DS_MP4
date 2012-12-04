@@ -58,7 +58,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 				index++;
 				temp.waitFor();
 				int result = temp.exitValue();
-				WriteLog.writelog(machine.myName, "Maple Task  " + index + "exited with code " + result);
+				WriteLog.writelog(machine.myName, "Maple Task  " + fileName + "exited with code " + result);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
