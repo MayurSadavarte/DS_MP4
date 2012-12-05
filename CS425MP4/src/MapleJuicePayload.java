@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.Socket;
 import java.util.*;
 
 
@@ -30,6 +31,10 @@ public class MapleJuicePayload implements Serializable{
 		
 	}
 	
+	public MapleJuicePayload() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void setByteArray(Object originalObject) {
 		//byte[] op = new byte[1016];
 		ByteArrayOutputStream baos=null;
@@ -87,14 +92,52 @@ public class MapleJuicePayload implements Serializable{
 		return generic_action;
 	}
 	
-	public void sendMapleJuicePacket(String targetNode) {
+	public Socket sendMapleJuicePacket(String targetNode, boolean responseRequired) {
+		Socket sock;
 		try {
 			WriteLog.writelog(Machine.stName, "Initiating Sending of  MapleJuicePayload to "+targetNode);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		MapleJuiceClient mapleJuiceClient = new MapleJuiceClient(this, targetNode);
+		MapleJuiceClient mapleJuiceClient = new MapleJuiceClient(this, targetNode, responseRequired);
 		mapleJuiceClient.send();
+		return mapleJuiceClient.sock;
+	}
+	
+	public void sendMapleJuicePacket(Socket socket) {
+		try {
+			WriteLog.writelog(Machine.stName, "Initiating Sending of  MapleJuicePayload as response on the recieved socket ");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		MapleJuiceClient mapleJuiceClient = new MapleJuiceClient(socket);
+		mapleJuiceClient.send();
+	}
+	public void receiveMapleJuicePacket(Socket socket) {
+		ObjectInputStream ois = null;
+		try {
+			ois = new ObjectInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		MapleJuicePayload mjPayload = null;
+		try {
+			//mjPayload = new MapleJuicePayload();
+			mjPayload = ((MapleJuicePayload)(ois.readObject()));
+			this.messageType = mjPayload.messageType;
+			this.payload = mjPayload.payload.clone();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
 	}
 }
