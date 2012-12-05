@@ -47,6 +47,7 @@ public class MapleJuiceListener implements Runnable {
 			mj_payload.setByteArray(temp);
 			mj_payload.sendMapleJuicePacket(m.memberList.elementAt(j), false);
 		}
+
 		
 		TaskStatus status = new TaskStatus();
 		status.taskId = task_id;
@@ -70,10 +71,11 @@ public class MapleJuiceListener implements Runnable {
 		
 
 
-	}
+}
 
 
 	public void processJuiceCommand(String sdfsExe, int num_reducers, String outputsdfsFileName, String outputFilePrefix) {
+		
 	}
 	
 	
