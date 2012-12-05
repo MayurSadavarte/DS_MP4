@@ -47,13 +47,11 @@ public class MapleJuiceListener implements Runnable {
 			mj_payload.setByteArray(temp);
 			mj_payload.sendMapleJuicePacket(m.memberList.elementAt(j));
 		}
-		
-
-
 	}
 
 
 	public void processJuiceCommand(String sdfsExe, int num_reducers, String outputsdfsFileName, String outputFilePrefix) {
+		
 	}
 	
 	
