@@ -103,8 +103,23 @@ public class FileReplication implements Runnable {
 		getPacket.add(m.myName);
 
 		//TODO - update myFileList, return only when file transfer completes
+		try {
+			WriteLog.writelog(m.myName, "SDFSGet Message sent to master for "+FileID);
+		} catch (IOException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
 		sendListMsg(getPacket, m.masterName);
 		
+		//crucial change...will keep waiting here till the myFileList gets populated with the fileID
+		while(!m.myFileList.contains(FileID));
+	
+		try {
+			WriteLog.writelog(m.myName, "SDFSGet completed for "+FileID);
+		} catch (IOException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
 	}
 
 
@@ -674,11 +689,34 @@ public class FileReplication implements Runnable {
 						e.printStackTrace();
 					}
 
-					Runnable runnable = new FileTransferClient(copyFN, recvList.elementAt(1), serverIP);
-					Thread thread = new Thread(runnable);
+					Runnable runnableClient = new FileTransferClient(copyFN, recvList.elementAt(1), serverIP);
+					Thread thread = new Thread(runnableClient);
 					thread.start();
 
-					m.myFileList.add(copyFN);
+					/*try {
+						thread.wait();
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}*/
+					try {
+						WriteLog.writelog(m.myName, "Received COPY message, copy started for "+copyFN);
+					} catch (IOException e3) {
+						// TODO Auto-generated catch block
+						e3.printStackTrace();
+					}
+					synchronized(runnableClient) {
+						m.myFileList.add(copyFN);
+					}
+					try {
+						WriteLog.writelog(m.myName, "COPY completed for "+copyFN);
+					} catch (IOException e3) {
+						// TODO Auto-generated catch block
+						e3.printStackTrace();
+					}
+					//crucial change...will keep waiting here till the myFileList gets populated with the fileID
+					//while(!m.myFileList.contains(copyFN));
+
 					try {
 						WriteLog.writelog(m.myName, "myFileList after COPY - "+m.myFileList.toString());
 					} catch (IOException e) {
