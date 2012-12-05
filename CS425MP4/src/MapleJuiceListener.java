@@ -45,8 +45,28 @@ public class MapleJuiceListener implements Runnable {
 			temp.outputFilePrefix = outputFilePrefix;
 			MapleJuicePayload mj_payload = new MapleJuicePayload("MapleTask");
 			mj_payload.setByteArray(temp);
-			mj_payload.sendMapleJuicePacket(m.memberList.elementAt(j));
+			mj_payload.sendMapleJuicePacket(m.memberList.elementAt(j), false);
 		}
+		
+		TaskStatus status = new TaskStatus();
+		status.taskId = task_id;
+		status.messageType = new String("get");
+		//Monitor the progress on the node every 10 seconds
+		for (int j = 0 ; ((j < m.memberList.size()) && (nodeFileList[j].size()>0)); j++) {
+			 
+			MapleJuicePayload mj_payload = new MapleJuicePayload("TaskStatus");
+			
+			mj_payload.setByteArray(status);
+			Socket sendSocket = mj_payload.sendMapleJuicePacket(m.memberList.elementAt(j), true);
+			mj_payload.receiveMapleJuicePacket(sendSocket);
+			try {
+				Thread.sleep(10 * 1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		
 
 

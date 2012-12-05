@@ -51,14 +51,14 @@ public class MapleAction extends GenericPayload implements Serializable{
 
 		}
 		MapleJuiceListener.task_map.put(new Integer(mapleTaskId), new HashMap<String, Process>(processList));
-		int index = 0;
+		//int index = 0;
 		for (String fileName  : processList.keySet()) {
 			try {
 				Process temp = processList.get(fileName);
-				index++;
+				//index++;
 				temp.waitFor();
 				int result = temp.exitValue();
-				WriteLog.writelog(machine.myName, "Maple Task  " + fileName + "exited with code " + result);
+				WriteLog.writelog(machine.myName, "Maple Task  " + fileName + " exited with code " + result);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
