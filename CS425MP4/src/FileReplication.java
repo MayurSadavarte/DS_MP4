@@ -723,8 +723,5 @@ public class FileReplication implements Runnable {
 				e.printStackTrace();
 			}
 		}				
-
-
 	}
-
 }

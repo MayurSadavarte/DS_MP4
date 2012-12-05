@@ -42,9 +42,6 @@ public class client {
 		Scanner s = new Scanner(System.in);
 		String cmd = null;
 
-		//Runnable runnable = new FileTransferServer();
-		//
-		//
 		server = new FileTransferServer();
 		server.start();
 
@@ -70,29 +67,9 @@ public class client {
 				putMsg.add(sdfsFileName);
 				putMsg.add(myName);
 
-				//				putMsg.add(cmd.substring(4, cmd.indexOf(' ', 4)));
-				//				putMsg.add(cmd.substring(cmd.lastIndexOf(' ')+1));
-				//				putMsg.add(myName);
-
 				WriteLog.writelog(myName, "sendPutMsg:" + putMsg.elementAt(1)+putMsg.elementAt(2));
-				/*				byte[] mList = null;
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			    try {
-			    	ObjectOutputStream oos = new ObjectOutputStream(baos);
-			    	oos.writeObject(putMsg);
-			    	oos.flush();
-			    	//TODO - need to decide whether we need to send length also in first packet and then actual packet
-			    	// get the byte array of the object
-			    	mList = baos.toByteArray();
-			    } catch(IOException e) {
-			    	e.printStackTrace();
-			    }
-
-				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT); */
-
 				sendMsgToMaster(putMsg, masterIP);
-				//String sourceFN = cmd.substring(4, cmd.indexOf(' ', 4));
-				//server.setSource(sourceFN);
+
 			}
 			else if(cmd.startsWith("get ")){
 				Vector<String> getMsg = new Vector<String>();
@@ -104,25 +81,10 @@ public class client {
 				localFileName = lineScanner.next();
 
 				getMsg.add("G");
-				//				getMsg.add(cmd.substring(4, cmd.indexOf(' ', 4)));
 				getMsg.add(sdfsFileName);
 				getMsg.add(myName);
 
 				WriteLog.writelog(myName, "sendPutMsg:"+getMsg.elementAt(1));
-				/*				byte[] mList = null;
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			    try {
-			    	ObjectOutputStream oos = new ObjectOutputStream(baos);
-			    	oos.writeObject(getMsg);
-			    	oos.flush();
-
-			    	// get the byte array of the object
-			    	mList = baos.toByteArray();
-			    } catch(IOException e) {
-			    	e.printStackTrace();
-			    }
-
-				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT); */
 				sendMsgToMaster(getMsg, masterIP);
 				Vector<String> serverIP = recvListMsg();
 				//String copyFN = cmd.substring(cmd.lastIndexOf(' ')+1);
@@ -146,20 +108,6 @@ public class client {
 				delMsg.add(sdfsFileName);
 
 				WriteLog.writelog(myName, "sendPutMsg: " + delMsg.elementAt(1));
-				/*				byte[] mList = null;
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			    try {
-			    	ObjectOutputStream oos = new ObjectOutputStream(baos);
-			    	oos.writeObject(delMsg);
-			    	oos.flush();
-
-			    	// get the byte array of the object
-			    	mList = baos.toByteArray();
-			    } catch(IOException e) {
-			    	e.printStackTrace();
-			    }
-
-				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT); */
 				sendMsgToMaster(delMsg, masterIP);
 			}
 			else if(cmd.startsWith("updateMaster ")){
@@ -197,22 +145,6 @@ public class client {
 					mapleMsg.add(sdfsFile);
 				}
 
-				/*				WriteLog.writelog(myName, "sendMapleMsg: " + mapleMsg.elementAt(1));
-				byte[] mList = null;
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			    try {
-			    	ObjectOutputStream oos = new ObjectOutputStream(baos);
-			    	oos.writeObject(mapleMsg);
-			    	oos.flush();
-
-			    	// get the byte array of the object
-			    	mList = baos.toByteArray();
-			    } catch(IOException e) {
-			    	e.printStackTrace();
-			    }
-
-				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT); */
-
 				sendMsgToMaster(mapleMsg, masterIP);
 
 			}else if(cmd.startsWith("juice ")) {
@@ -234,20 +166,6 @@ public class client {
 				juiceMsg.add(juiceFileName);
 
 				WriteLog.writelog(myName, "sendJuiceMsg: " + juiceMsg.elementAt(1));
-				/*byte[] mList = null;
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			    try {
-			    	ObjectOutputStream oos = new ObjectOutputStream(baos);
-			    	oos.writeObject(juiceMsg);
-			    	oos.flush();
-
-			    	// get the byte array of the object
-			    	mList = baos.toByteArray();
-			    } catch(IOException e) {
-			    	e.printStackTrace();
-			    }
-
-				sendMsg(sock, masterIP, mList, Machine.FILE_OPERATIONS_PORT); */
 
 				sendMsgToMaster(juiceMsg, masterIP);
 			}
@@ -279,8 +197,7 @@ public class client {
 		try {
 			InetAddress ipAddr = InetAddress.getByName(ip);
 			//byte[] sendData = msg.getBytes();
-			DatagramPacket sendPacket = new DatagramPacket(msg,
-					msg.length, ipAddr, portN);
+			DatagramPacket sendPacket = new DatagramPacket(msg, msg.length, ipAddr, portN);
 			sock.send(sendPacket);
 		} catch (SocketException e) {
 			e.printStackTrace();
@@ -334,8 +251,6 @@ public class client {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();			
 		}
-
 		return(returnList);
 	}
-
 }

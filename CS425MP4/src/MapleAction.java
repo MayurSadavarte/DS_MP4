@@ -31,7 +31,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 			machine.FileReplicator.sendSDFSGetMessage(mapleExe);
 		}
 		for (String fileInfo : inputFileInfo) {
-			if (!machine.myFileList.contains(mapleExe)) {
+			if (!machine.myFileList.contains(fileInfo)) {
 				machine.FileReplicator.sendSDFSGetMessage(fileInfo);
 			}
 			//machine.FileReplicator.sendSDFSGetMessage(fileInfo);
