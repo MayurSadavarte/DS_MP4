@@ -66,5 +66,4 @@ public class MapleJuiceThread implements Runnable {
 
 	}
 
-
 }
