@@ -50,7 +50,7 @@ public class MapleJuiceThread implements Runnable {
 			TaskStatus status=null;
 			generic_action = mjPayload.parseByteArray();
 			status = (TaskStatus)generic_action;
-			((TaskStatus)status).processPayload(sock);
+			status.processPayload(sock);
 		}
 		//ois.close();
 

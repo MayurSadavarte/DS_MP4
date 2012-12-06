@@ -87,6 +87,12 @@ public class MapleJuiceListener implements Runnable {
 				mj_payload.setByteArray(status);
 				
 				Socket sendSocket = mj_payload.sendMapleJuicePacket(nodeName, true);
+				try {
+					WriteLog.writelog(m.myName, "Sending status request to " + nodeName);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				mj_payload.receiveMapleJuicePacket(sendSocket);
 				TaskStatus receivedStatus = (TaskStatus) mj_payload.parseByteArray();
 				//Print the obtained results

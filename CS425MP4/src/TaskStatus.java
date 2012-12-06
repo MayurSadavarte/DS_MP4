@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.HashMap;
@@ -15,7 +16,13 @@ import java.util.HashMap;
 	HashMap<String, String> taskStatus;
 	public void processPayload(Socket socket) {
 		if (messageType.equals("get")) {
-		   	TaskStatus response = new TaskStatus();
+			try {
+				WriteLog.writelog(Machine.stName, "Received task status request for task ID " + taskId);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			TaskStatus response = new TaskStatus();
 		   	response.messageType = new String("response");
 		   	response.taskStatus = new HashMap<String, String>();
 			if (MapleJuiceListener.task_map.containsKey(new Integer(taskId))) {

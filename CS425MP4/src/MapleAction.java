@@ -26,6 +26,12 @@ public class MapleAction extends GenericPayload implements Serializable{
 		System.out.println(mapleTaskId);
 	}
 	public void processMapleActionPayload(Machine machine) {
+		try {
+			WriteLog.writelog(machine.myName, "Received Maple Task Payload");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		//TODO : Mayur Get the exe and the files from SDFS
 		if (!machine.myFileList.contains(mapleExe)) {
 			machine.FileReplicator.sendSDFSGetMessage(mapleExe);
@@ -58,7 +64,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 				//index++;
 				temp.waitFor();
 				int result = temp.exitValue();
-			WriteLog.writelog(machine.myName, "Maple Task  " + fileName + "exited with code " + result);
+				WriteLog.writelog(machine.myName, "Maple Task  " + fileName + "exited with code " + result);
 				
 				if(result == 0) {
 					//Process exited successfully.
@@ -77,6 +83,8 @@ public class MapleAction extends GenericPayload implements Serializable{
 			}
 
 		}
+		MapleJuiceListener.task_map.remove(mapleTaskId);
+		
 	}
 
 
