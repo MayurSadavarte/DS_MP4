@@ -44,7 +44,7 @@ public class FileTransferClient implements Runnable {
 		
 		synchronized(this) {
 			try {
-				WriteLog.writelog("FileTransferClient", " thread: file transfer started");
+				WriteLog.writelog(Machine.stName, " thread: file transfer started");
 			} catch (IOException e3) {
 				// TODO Auto-generated catch block
 				e3.printStackTrace();
@@ -124,7 +124,7 @@ public class FileTransferClient implements Runnable {
 			}
 
 			try {
-				WriteLog.writelog("FileTransferClient", " thread: file transfer completed");
+				WriteLog.writelog(Machine.stName, " thread: file transfer completed");
 			} catch (IOException e3) {
 				// TODO Auto-generated catch block
 				e3.printStackTrace();

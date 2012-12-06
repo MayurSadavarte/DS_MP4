@@ -613,18 +613,20 @@ public class FileReplication implements Runnable {
 						Vector<String> ListNodes = m.file_node_map.get(FileID);
 						String RandomNode = ListNodes.elementAt((int)(Math.random() * ListNodes.size()));
 
-						sendCOPYMessage(recvList.elementAt(2), FileID, FileID, RandomNode);
+						if(!m.file_node_map.get(FileID).contains(recvList.elementAt(2))) {
+							sendCOPYMessage(recvList.elementAt(2), FileID, FileID, RandomNode);
 
-						m.file_node_map.get(FileID).add(RandomNode);
-						m.node_file_map.get(RandomNode).add(FileID);
+							m.file_node_map.get(FileID).add(RandomNode);
+							m.node_file_map.get(RandomNode).add(FileID);
 
 
-						try {
-							WriteLog.writelog(m.myName, "node_file_map after SDFS_GET - "+m.node_file_map.toString());
-							WriteLog.writelog(m.myName, "file_node_map after SDFS_GET - "+m.file_node_map.toString());
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							try {
+								WriteLog.writelog(m.myName, "node_file_map after SDFS_GET - "+m.node_file_map.toString());
+								WriteLog.writelog(m.myName, "file_node_map after SDFS_GET - "+m.file_node_map.toString());
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					}
 
