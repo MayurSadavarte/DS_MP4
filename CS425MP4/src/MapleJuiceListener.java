@@ -70,9 +70,14 @@ public class MapleJuiceListener implements Runnable {
 					if (!master_task_map.containsKey(freeNodeList.elementAt(j))) {
 						master_task_map.put(freeNodeList.elementAt(j), nodeFileList[j]);
 					}
-					freeNodeList.remove(j);
+					//freeNodeList.remove(j);
+					//j--;
 					//master_task_map.get(m.memberList.elementAt(j)).add(nodeFileList[j]);
 				}
+				for (int j = 0 ; ((j < freeNodeList.size()) && (nodeFileList[j].size() > 0)); j++) {
+					freeNodeList.remove(j);
+				}
+				
 			}
 
 			TaskStatus status = new TaskStatus();
