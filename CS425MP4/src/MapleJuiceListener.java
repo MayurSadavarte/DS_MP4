@@ -35,6 +35,9 @@ public class MapleJuiceListener implements Runnable {
 
 		freeNodeList = new Vector<String>(m.memberList);
 		pendingFileList = new Vector<String>(filesToProcess);
+		for (int j = 0 ; j < freeNodeList.size(); j++) {
+			System.out.println(freeNodeList.elementAt(j));
+		}
 		boolean tasksComplete = false;
 		task_id++;
 		@SuppressWarnings("rawtypes")
