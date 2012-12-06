@@ -163,7 +163,7 @@ public class MapleJuiceListener implements Runnable {
 			juiceAction.juiceOutputFile = outputsdfsFileName;
 			MapleJuicePayload mj_payload = new MapleJuicePayload("JuiceTask");
 			mj_payload.setByteArray(juiceAction);
-			mj_payload.sendMapleJuicePacket(m.memberList.elementAt(j));
+			mj_payload.sendMapleJuicePacket(m.memberList.elementAt(j), false);
 		} 
 	}
 	
