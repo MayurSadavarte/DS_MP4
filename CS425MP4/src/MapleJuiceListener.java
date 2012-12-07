@@ -36,16 +36,16 @@ public class MapleJuiceListener implements Runnable {
 		freeNodeList = new Vector<String>(m.memberList);
 		pendingFileList = new Vector<String>(filesToProcess);
 		for (int j = 0 ; j < freeNodeList.size(); j++) {
-			System.out.println(pendingFileList + "****\n\n\n");
+			System.out.println(pendingFileList + "**** + filesToProcess \n\n\n");
 		}
 		//System.out.println(freeNodeList.elementAt(j));
 		boolean tasksComplete = false;
 		task_id++;
 		@SuppressWarnings("rawtypes")
 		ArrayList[] nodeFileList = null;
-		while (!tasksComplete && pendingFileList != null && pendingFileList.size() > 0) {
+		while (!tasksComplete || (pendingFileList != null && pendingFileList.size() > 0)) {
 
-
+            System.out.println("\nInside");
 			if (pendingFileList.size() > 0 && freeNodeList.size() > 0) {
 
 				nodeFileList = new ArrayList[freeNodeList.size()];
@@ -97,7 +97,7 @@ public class MapleJuiceListener implements Runnable {
 			status.taskId = task_id;
 			status.messageType = new String("get");
 			//Monitor the progress on the node every 10 seconds
-			tasksComplete = true;
+			
 			for (String nodeName : master_task_map.keySet() ) {
                
 				MapleJuicePayload mj_payload = new MapleJuicePayload("TaskStatus");
@@ -115,8 +115,12 @@ public class MapleJuiceListener implements Runnable {
 				mj_payload.receiveMapleJuicePacket(sendSocket);
 				TaskStatus receivedStatus = (TaskStatus) mj_payload.parseByteArray();
 				//Print the obtained results
-				boolean mapsCompletedOnNode = true;
+				boolean mapsCompletedOnNode = false;
 				System.out.println("Status on node " + nodeName +  " :");
+				if (receivedStatus.taskStatus.keySet().size() > 0) {
+					tasksComplete = true;
+					mapsCompletedOnNode = true;
+				}
 				for (String fileName : receivedStatus.taskStatus.keySet())
 				{
 					System.out.println("Filename : " + fileName + " Status : " + receivedStatus.taskStatus.get(fileName));
@@ -131,12 +135,13 @@ public class MapleJuiceListener implements Runnable {
 					freeNodeList.add(nodeName);
 					master_task_map.remove(nodeName);
 				}
-				try {
-					Thread.sleep(10 * 1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
+			}
+			try {
+				Thread.sleep(10 * 1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 

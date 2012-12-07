@@ -32,6 +32,7 @@ import java.util.HashMap;
 		   	response.messageType = new String("response");
 		   	response.taskStatus = new HashMap<String, String>();
 		   	if (MapleJuiceListener.task_map.containsKey(new Integer(taskId))) {
+		   		boolean all_done= true;
 		   		HashMap <String, Process> temp = MapleJuiceListener.task_map.get(taskId);
 		   		String taskState = null;
 		   		for (String fileName : temp.keySet()) {
@@ -46,12 +47,17 @@ import java.util.HashMap;
 		   				response.taskStatus.put(fileName, taskState);
 		   			}catch (IllegalThreadStateException a){
 		   				response.taskStatus.put(fileName, "In progress");
+		   				all_done = false;
 		   			}
+		   		}
+		   		if (all_done) {
+		   			MapleJuiceListener.task_map.remove(taskId);
 		   		}
 		   	
 			}
 			MapleJuicePayload statusResponse = new MapleJuicePayload("TaskStatus"); 
 			statusResponse.setByteArray(response);
+			System.out.println("%%%%%%%%%%%%%%%%%%%%%%  " + statusResponse.messageType + "&&&&&&&&&&&&&&&&  " + statusResponse.payload.toString() + "\n");
 			statusResponse.sendMapleJuicePacket(socket);
 			//for (Integer task_id: MapleJuiceListener.task_map.keySet()) {
 			//}

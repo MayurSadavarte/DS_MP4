@@ -31,27 +31,19 @@ public class MapleJuiceClient {
 			System.out.println("Connecting...");
 		}
 	}
-	public MapleJuiceClient(Socket s){
+	public MapleJuiceClient(MapleJuicePayload payload, Socket s){
 
 		sock = s;
 		ResponseRequired = false;
+		this.payload = payload;
 
 	}
 
-	//public void send() {
-		//Thread thread = new Thread(this);
-		//thread.start();
-		//return;
-		
-	//}
+
 
 	public void send(){
 
-		//Socket sock;
 
-		//boolean responseRequired = true;
-
-		// receive file
 
 
 		try {
@@ -67,7 +59,7 @@ public class MapleJuiceClient {
 		try {
 			som = sock.getOutputStream();
 			oos = new ObjectOutputStream(som);
-			System.out.println(payload.toString());
+			System.out.println("******\n" + payload.messageType + "\n" + payload.payload.toString() + "\n*******\n");
 			oos.writeObject(this.payload);
 			//oos.close();
 		} catch (IOException e) {

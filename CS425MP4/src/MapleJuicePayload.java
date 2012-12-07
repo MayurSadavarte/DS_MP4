@@ -104,7 +104,7 @@ public class MapleJuicePayload implements Serializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		MapleJuiceClient mapleJuiceClient = new MapleJuiceClient(socket);
+		MapleJuiceClient mapleJuiceClient = new MapleJuiceClient(this, socket);
 		mapleJuiceClient.send();
 	}
 	public void receiveMapleJuicePacket(Socket socket) {
