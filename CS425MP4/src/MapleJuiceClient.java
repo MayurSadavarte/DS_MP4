@@ -47,8 +47,8 @@ public class MapleJuiceClient implements Runnable {
 	public void run(){
 
 		//Socket sock;
-		
-        //boolean responseRequired = true;
+
+		//boolean responseRequired = true;
 
 		// receive file
 
@@ -72,31 +72,32 @@ public class MapleJuiceClient implements Runnable {
 			e.printStackTrace();
 		}	
 		finally {
-			if(oos != null)
+			if (!ResponseRequired) {
+				if(oos != null)
+					try {
+						oos.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				try {
-					oos.close();
-				} catch (IOException e) {
+					som.close();
+				} catch (IOException e1) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					e1.printStackTrace();
 				}
-			try {
-				som.close();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			if ((sock != null) && (!ResponseRequired))
-				System.out.println("Closing socket, ResponseRequired = " + ResponseRequired);
+				if (sock != null)
+					System.out.println("Closing socket, ResponseRequired = " + ResponseRequired);
 				try {
-					
+
 					sock.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 
+			}
+
 		}
-
-
 
 
 	}
