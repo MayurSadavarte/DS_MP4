@@ -114,6 +114,12 @@ public class MapleJuiceListener implements Runnable {
 				}
 				mj_payload.receiveMapleJuicePacket(sendSocket);
 				TaskStatus receivedStatus = (TaskStatus) mj_payload.parseByteArray();
+				try {
+					sendSocket.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				//Print the obtained results
 				boolean mapsCompletedOnNode = false;
 				System.out.println("Status on node " + nodeName +  " :");

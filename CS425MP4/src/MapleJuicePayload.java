@@ -120,8 +120,8 @@ public class MapleJuicePayload implements Serializable{
 		MapleJuicePayload mjPayload = null;
 		try {
 			//mjPayload = new MapleJuicePayload();
-			Object o = ((ois.readObject()));
-			mjPayload = ((MapleJuicePayload)(o));
+			
+			mjPayload = ((MapleJuicePayload)(ois.readObject()));
 			this.messageType = mjPayload.messageType;
 			this.payload = mjPayload.payload.clone();
 		} catch (IOException e) {

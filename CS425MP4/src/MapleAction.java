@@ -33,9 +33,9 @@ public class MapleAction extends GenericPayload implements Serializable{
 			e1.printStackTrace();
 		}
 		//TODO : Mayur Get the exe and the files from SDFS
-		/*if (!machine.myFileList.contains(mapleExe) && ! (new File(mapleExe).isFile())) {
+		if (!machine.myFileList.contains(mapleExe) /*&& ! (new File(mapleExe).isFile())*/) {
 			machine.FileReplicator.sendSDFSGetMessage(mapleExe);
-		}*/
+		}
 		for (String fileInfo : inputFileInfo) {
 			if (!machine.myFileList.contains(fileInfo) && ! (new File(fileInfo).isFile())) {
 				machine.FileReplicator.sendSDFSGetMessage(fileInfo);
@@ -83,7 +83,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 			}
 
 		}
-		//MapleJuiceListener.task_map.remove(mapleTaskId);
+		
 		
 	}
 
