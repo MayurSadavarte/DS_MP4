@@ -66,7 +66,9 @@ public class MapleJuicePayload implements Serializable{
 					generic_action=(GenericPayload)maple_action;
 					//dummy = (GenericPayload) maple_action;
 					//dummy.printContents();
-				} else {
+				} else if(messageType.equalsIgnoreCase("TaskStatus")) {
+					TaskStatus status = (TaskStatus)oos.readObject();
+					generic_action=(GenericPayload)status;
 					//TODO multiple packet formats will come here
 				}
 			} catch (ClassNotFoundException e) {

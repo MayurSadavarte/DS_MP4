@@ -69,7 +69,12 @@ public class MapleJuiceThread implements Runnable {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+        try {
+			sock.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
