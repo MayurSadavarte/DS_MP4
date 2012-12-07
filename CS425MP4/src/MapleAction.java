@@ -64,7 +64,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 				//index++;
 				temp.waitFor();
 				int result = temp.exitValue();
-				WriteLog.writelog(machine.myName, "Maple Task  " + fileName + "exited with code " + result);
+				WriteLog.writelog(machine.myName, "Maple Task  " + fileName + " exited with code " + result);
 				
 				if(result == 0) {
 					//Process exited successfully.
