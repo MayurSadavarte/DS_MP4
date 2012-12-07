@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class MapleJuiceClient implements Runnable {
+public class MapleJuiceClient {
 	private String target;
 	private MapleJuicePayload payload;
 	public Socket sock;
@@ -38,13 +38,14 @@ public class MapleJuiceClient implements Runnable {
 
 	}
 
-	public void send() {
-		Thread thread = new Thread(this);
-		thread.start();
-		return;
-	}
+	//public void send() {
+		//Thread thread = new Thread(this);
+		//thread.start();
+		//return;
+		
+	//}
 
-	public void run(){
+	public void send(){
 
 		//Socket sock;
 

@@ -32,6 +32,7 @@ public class MapleJuiceThread implements Runnable {
 			e.printStackTrace();
 		}*/
 
+		
 		MapleJuicePayload mjPayload = new MapleJuicePayload();
 		mjPayload.receiveMapleJuicePacket(sock);
 		/*try {
@@ -40,6 +41,7 @@ public class MapleJuiceThread implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+		
 		try {
 			WriteLog.writelog(machine.myName, "Received payload of type " + mjPayload.messageType);
 		} catch (IOException e) {
