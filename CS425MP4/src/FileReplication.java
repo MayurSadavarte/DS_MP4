@@ -480,9 +480,9 @@ public class FileReplication implements Runnable {
 						System.out.println("filereplication PUT received"); 
 						//master receiving PUT
 						// send copy msg to primary machine and backup machine
-						if(m.file_node_map.containsKey(recvList.elementAt(2))){
+						if(m.file_node_map.containsKey(recvList.elementAt(2)) && recvList.lastElement().equalsIgnoreCase("append")){
 							//System.out.println("file already exists");
-							WriteLog.writelog(m.myName, "File already present. So need to send this to the same nodes");
+							WriteLog.writelog(m.myName, "File already present, but PUT called in APPEND mode hence sending this to the nodes that already have this file");
 							Vector<String> tNodes = m.file_node_map.get(recvList.elementAt(2));
 							
 							for(String tNode : tNodes){
@@ -491,7 +491,9 @@ public class FileReplication implements Runnable {
 											+ tNode + " rfile: " + recvList.elementAt(1) + "lfile: " + recvList.elementAt(2));
 							}
 							
-						}else{
+						} else if(m.file_node_map.containsKey(recvList.elementAt(2))) {
+							WriteLog.writelog(m.myName, "PUT command received for "+recvList.elementAt(2)+ "File, but file already exists in the file system!! hence ignoring PUT");
+						} else {
 							Vector<String> sortedKey = sort_node_file_map();
 								
 							//m.sendMsg(m.filerep_sock, sortedKey.firstElement(), , portN)
