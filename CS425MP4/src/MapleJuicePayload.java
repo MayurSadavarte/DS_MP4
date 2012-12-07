@@ -86,7 +86,7 @@ public class MapleJuicePayload implements Serializable{
 	public Socket sendMapleJuicePacket(String targetNode, boolean responseRequired) {
 		//Socket sock;
 		try {
-			WriteLog.writelog(Machine.stName, "Initiating Sending of  MapleJuicePayload to "+targetNode);
+			WriteLog.writelog(Machine.stName, "Initiating Sending of  MapleJuicePayload (" + messageType + " ) to "+targetNode);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,7 +99,7 @@ public class MapleJuicePayload implements Serializable{
 	
 	public void sendMapleJuicePacket(Socket socket) {
 		try {
-			WriteLog.writelog(Machine.stName, "Initiating Sending of  MapleJuicePayload as response on the recieved socket ");
+			WriteLog.writelog(Machine.stName, "Initiating Sending of  MapleJuicePayload (TaskStatus) as response on the recieved socket ");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

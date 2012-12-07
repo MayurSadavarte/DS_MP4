@@ -16,7 +16,7 @@ import java.util.HashMap;
 	HashMap<String, String> taskStatus;
 	public void processPayload(Socket socket) {
 		try {
-			WriteLog.writelog(Machine.stName, "Received task status payload ***");
+			WriteLog.writelog(Machine.stName, "Received task status payload.Subtype : " + messageType + " ***");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
