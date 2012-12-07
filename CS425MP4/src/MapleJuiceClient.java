@@ -23,7 +23,7 @@ public class MapleJuiceClient implements Runnable {
 
 			try {
 				sock = new Socket(target, Machine.MAPLE_JUICE_PORT);
-				responseRequired = false;
+				//responseRequired = false;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -34,7 +34,7 @@ public class MapleJuiceClient implements Runnable {
 	public MapleJuiceClient(Socket s){
 
 		sock = s;
-		ResponseRequired = true;
+		ResponseRequired = false;
 
 	}
 
@@ -59,11 +59,13 @@ public class MapleJuiceClient implements Runnable {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+		System.out.println("in MapleJuiceClient run - responseRequired - "+this.ResponseRequired);
 
 		ObjectOutputStream oos = null;
+		OutputStream som = null;
 		try {
-			oos = new ObjectOutputStream(sock.getOutputStream());
+			som = sock.getOutputStream();
+			oos = new ObjectOutputStream(som);
 			oos.writeObject(this.payload);
 			//oos.close();
 		} catch (IOException e) {
@@ -77,9 +79,16 @@ public class MapleJuiceClient implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			
-			if (sock != null && !ResponseRequired)
+			try {
+				som.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if ((sock != null) && (!ResponseRequired))
+				System.out.println("Closing socket, ResponseRequired = " + ResponseRequired);
 				try {
+					
 					sock.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

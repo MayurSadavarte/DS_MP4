@@ -40,6 +40,12 @@ public class MapleJuiceThread implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+		try {
+			WriteLog.writelog(machine.myName, "Received payload of type " + mjPayload.messageType);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (mjPayload.messageType.equalsIgnoreCase("MapleTask")) {
 			MapleAction maple_action=null;
 			generic_action = mjPayload.parseByteArray();

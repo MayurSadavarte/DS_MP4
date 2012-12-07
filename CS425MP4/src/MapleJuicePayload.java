@@ -1,6 +1,7 @@
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -100,6 +101,7 @@ public class MapleJuicePayload implements Serializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("in sendMapleJuicePacket: responseRequired - "+ responseRequired);
 		MapleJuiceClient mapleJuiceClient = new MapleJuiceClient(this, targetNode, responseRequired);
 		mapleJuiceClient.send();
 		return mapleJuiceClient.sock;
@@ -117,8 +119,10 @@ public class MapleJuicePayload implements Serializable{
 	}
 	public void receiveMapleJuicePacket(Socket socket) {
 		ObjectInputStream ois = null;
+		InputStream sim = null;
 		try {
-			ois = new ObjectInputStream(socket.getInputStream());
+			sim = socket.getInputStream();
+			ois = new ObjectInputStream(sim);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -138,6 +142,14 @@ public class MapleJuicePayload implements Serializable{
 			e.printStackTrace();
 		}
 	
+		
+		try {
+			ois.close();
+			sim.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }

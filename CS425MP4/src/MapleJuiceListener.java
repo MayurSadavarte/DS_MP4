@@ -36,8 +36,9 @@ public class MapleJuiceListener implements Runnable {
 		freeNodeList = new Vector<String>(m.memberList);
 		pendingFileList = new Vector<String>(filesToProcess);
 		for (int j = 0 ; j < freeNodeList.size(); j++) {
-			System.out.println(freeNodeList.elementAt(j));
+			System.out.println(pendingFileList + "****\n\n\n");
 		}
+		//System.out.println(freeNodeList.elementAt(j));
 		boolean tasksComplete = false;
 		task_id++;
 		@SuppressWarnings("rawtypes")
@@ -53,14 +54,21 @@ public class MapleJuiceListener implements Runnable {
 				}
 
 				int i = 0;	
+				System.out.println("Size of pendingFileList : " + pendingFileList.size());
 				for (String fileName : pendingFileList) {
 
 					nodeFileList[i].add(fileName);
 					i = (i + 1) % freeNodeList.size();
-					pendingFileList.remove(fileName);
+					
 
 				}
-				for (int j = 0 ; ((j < freeNodeList.size()) && (nodeFileList[j].size() > 0)); j++) {
+				pendingFileList.clear();
+				int j;
+				System.out.println(freeNodeList);
+				for (int z =0; z < freeNodeList.size(); z++) {
+					System.out.println(nodeFileList[z]);
+				}
+				for ( j = 0 ; ((j < freeNodeList.size()) && (nodeFileList[j].size() > 0)); j++) {
 					MapleAction temp = new MapleAction();
 					temp.mapleTaskId = task_id;
 					temp.machineId = j + 1;
@@ -69,6 +77,7 @@ public class MapleJuiceListener implements Runnable {
 					temp.outputFilePrefix = outputFilePrefix;
 					MapleJuicePayload mj_payload = new MapleJuicePayload("MapleTask");
 					mj_payload.setByteArray(temp);
+					System.out.println("Sending payload to " + freeNodeList.elementAt(j) );
 					mj_payload.sendMapleJuicePacket(freeNodeList.elementAt(j), false);
 					if (!master_task_map.containsKey(freeNodeList.elementAt(j))) {
 						master_task_map.put(freeNodeList.elementAt(j), nodeFileList[j]);
@@ -77,8 +86,9 @@ public class MapleJuiceListener implements Runnable {
 					//j--;
 					//master_task_map.get(m.memberList.elementAt(j)).add(nodeFileList[j]);
 				}
-				for (int j = 0 ; ((j < freeNodeList.size()) && (nodeFileList[j].size() > 0)); j++) {
-					freeNodeList.remove(j);
+				for (int k = 0 ; k < j; k++) {
+					freeNodeList.remove(0);
+					//j--;
 				}
 				
 			}
@@ -91,6 +101,7 @@ public class MapleJuiceListener implements Runnable {
 			for (String nodeName : master_task_map.keySet() ) {
                
 				MapleJuicePayload mj_payload = new MapleJuicePayload("TaskStatus");
+				
 
 				mj_payload.setByteArray(status);
 				
