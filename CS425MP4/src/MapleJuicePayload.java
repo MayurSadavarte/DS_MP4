@@ -58,7 +58,7 @@ public class MapleJuicePayload implements Serializable{
 		GenericPayload generic_action = null;
 		try {
 			ObjectInputStream oos = new ObjectInputStream(bais);
-			GenericPayload dummy=null;
+			//GenericPayload dummy=null;
 			try {
 				if(messageType.equalsIgnoreCase("MapleTask")) {
 					MapleAction maple_action  = (MapleAction)oos.readObject();
@@ -75,19 +75,7 @@ public class MapleJuicePayload implements Serializable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			/*mapleTaskId = dummy.mapleTaskId;
-			machineId = dummy.machineId;
-			mapleExe = dummy.mapleExe;
-			inputFileInfo = dummy.inputFileInfo;
-			outputFilePrefix = dummy.outputFilePrefix;
-			
-			System.out.println(mapleTaskId);
-			System.out.println(machineId);
-			System.out.println(mapleExe);
-			System.out.println(inputFileInfo);
-			System.out.println(outputFilePrefix);*/
-			
-			//this = new MapleAction();
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,7 +84,7 @@ public class MapleJuicePayload implements Serializable{
 	}
 	
 	public Socket sendMapleJuicePacket(String targetNode, boolean responseRequired) {
-		Socket sock;
+		//Socket sock;
 		try {
 			WriteLog.writelog(Machine.stName, "Initiating Sending of  MapleJuicePayload to "+targetNode);
 		} catch (IOException e) {
@@ -132,7 +120,8 @@ public class MapleJuicePayload implements Serializable{
 		MapleJuicePayload mjPayload = null;
 		try {
 			//mjPayload = new MapleJuicePayload();
-			mjPayload = ((MapleJuicePayload)(ois.readObject()));
+			Object o = ((ois.readObject()));
+			mjPayload = ((MapleJuicePayload)(o));
 			this.messageType = mjPayload.messageType;
 			this.payload = mjPayload.payload.clone();
 		} catch (IOException e) {

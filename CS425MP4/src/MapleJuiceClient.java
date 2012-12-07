@@ -67,6 +67,7 @@ public class MapleJuiceClient {
 		try {
 			som = sock.getOutputStream();
 			oos = new ObjectOutputStream(som);
+			System.out.println(payload.toString());
 			oos.writeObject(this.payload);
 			//oos.close();
 		} catch (IOException e) {
