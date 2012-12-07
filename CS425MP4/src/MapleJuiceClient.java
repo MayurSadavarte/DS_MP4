@@ -6,7 +6,7 @@ public class MapleJuiceClient {
 	private MapleJuicePayload payload;
 	public Socket sock;
 	boolean ResponseRequired;
-	String myName;
+	//String myName;
 
 	public MapleJuiceClient(MapleJuicePayload payload, String target, boolean responseRequired){
 		this.target = target;
@@ -14,12 +14,12 @@ public class MapleJuiceClient {
 		sock = null;
 		ResponseRequired = responseRequired;
 		if (sock == null) {
-			try {
+			/*try {
 				myName = InetAddress.getLocalHost().getHostName();
 			} catch (UnknownHostException e2) {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
-			};
+			};*/
 
 			try {
 				sock = new Socket(target, Machine.MAPLE_JUICE_PORT);
@@ -47,7 +47,7 @@ public class MapleJuiceClient {
 
 
 		try {
-			WriteLog.writelog(myName, "Sending mapleJuicePayload to : " + target);
+			WriteLog.writelog(Machine.stName, "Sending mapleJuicePayload to : " + target);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
