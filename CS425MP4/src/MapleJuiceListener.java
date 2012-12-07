@@ -138,7 +138,7 @@ public class MapleJuiceListener implements Runnable {
 		
 		//TODO : This will borrow heavily from the way maple tasks are assigned. 
 		
-		
+		boolean tasksComplete = false;	
 		ArrayList<ArrayList<String>> nodeFileList = new ArrayList<ArrayList<String>>();
 		for (int i = 0 ; i < num_juices; i++) {
 			nodeFileList.add(i, new ArrayList<String>());
@@ -179,6 +179,57 @@ public class MapleJuiceListener implements Runnable {
 			mj_payload.setByteArray(juiceAction);
 			mj_payload.sendMapleJuicePacket(m.memberList.elementAt(j), false);
 		} 
+		
+		/*
+		////From here I've copied from the the maple.
+		TaskStatus status = new TaskStatus();
+		status.taskId = task_id;
+		status.messageType = new String("get");
+		//Monitor the progress on the node every 10 seconds
+		tasksComplete = true;
+		for (String nodeName : master_task_map.keySet() ) {
+           
+			MapleJuicePayload mj_payload = new MapleJuicePayload("TaskStatus");
+
+			mj_payload.setByteArray(status);
+			
+			Socket sendSocket = mj_payload.sendMapleJuicePacket(nodeName, true);
+			try {
+				WriteLog.writelog(m.myName, "Sending status request to " + nodeName);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			mj_payload.receiveMapleJuicePacket(sendSocket);
+			TaskStatus receivedStatus = (TaskStatus) mj_payload.parseByteArray();
+			//Print the obtained results
+			boolean juicesCompletedOnNode = true;
+			System.out.println("Status on node " + nodeName +  " :");
+			for (String fileName : receivedStatus.taskStatus.keySet())
+			{
+				System.out.println("Filename : " + fileName + " Status : " + receivedStatus.taskStatus.get(fileName));
+				if (receivedStatus.taskStatus.get(fileName).equals("In progress")) {
+					juicesCompletedOnNode = false;
+					tasksComplete = false;
+				}else if (receivedStatus.taskStatus.get(fileName).equals("Failed")) {
+					pendingFileList.add(fileName);
+				}
+			}
+			if (juicesCompletedOnNode) {
+				freeNodeList.add(nodeName);
+				master_task_map.remove(nodeName);
+			}
+			try {
+				Thread.sleep(10 * 1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		////Until here this is copied from the maple tasks
+		*/
 	}
 	
 	@Override
