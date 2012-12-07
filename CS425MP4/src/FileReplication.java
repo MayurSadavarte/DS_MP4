@@ -481,10 +481,19 @@ public class FileReplication implements Runnable {
 						//master receiving PUT
 						// send copy msg to primary machine and backup machine
 						if(m.file_node_map.containsKey(recvList.elementAt(2))){
-							System.out.println("file already exists");
+							//System.out.println("file already exists");
+							WriteLog.writelog(m.myName, "File already present. So need to send this to the same nodes");
+							Vector<String> tNodes = m.file_node_map.get(recvList.elementAt(2));
+							
+							for(String tNode : tNodes){
+								sendCOPYMessage(tNode, recvList.elementAt(1), recvList.elementAt(2), recvList.elementAt(3));
+								WriteLog.writelog(m.myName, "Copy msg: Src:" + recvList.elementAt(3) + " Dest: " 
+											+ tNode + " rfile: " + recvList.elementAt(1) + "lfile: " + recvList.elementAt(2));
+							}
+							
 						}else{
 							Vector<String> sortedKey = sort_node_file_map();
-
+								
 							//m.sendMsg(m.filerep_sock, sortedKey.firstElement(), , portN)
 							Vector<String> cpnodes = new Vector<String>();
 							/*Vector<String> cpMsg = new Vector<String>();
