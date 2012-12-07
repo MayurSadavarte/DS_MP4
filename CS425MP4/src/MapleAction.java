@@ -68,7 +68,8 @@ public class MapleAction extends GenericPayload implements Serializable{
 				
 				if(result == 0) {
 					//Process exited successfully.
-					machine.FileReplicator.sendSDFSPutMessage(fileName, fileName);
+					System.out.println("Process completed successfully ");
+					//machine.FileReplicator.sendSDFSPutMessage(fileName, fileName);
 					
 				} else {
 					//Process exited abnormally.
