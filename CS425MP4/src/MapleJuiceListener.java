@@ -98,57 +98,60 @@ public class MapleJuiceListener implements Runnable {
 			status.messageType = new String("get");
 			//Monitor the progress on the node every 10 seconds
 			
-			for (String nodeName : master_task_map.keySet() ) {
-               
-				MapleJuicePayload mj_payload = new MapleJuicePayload("TaskStatus");
-				
+			//synchronized(master_task_map) {
+				Vector<String> keyset = new Vector<String>(master_task_map.keySet());
+				for (String nodeName : keyset) {
 
-				mj_payload.setByteArray(status);
-				
-				Socket sendSocket = mj_payload.sendMapleJuicePacket(nodeName, true);
-				try {
-					WriteLog.writelog(m.myName, "Sending status request to " + nodeName);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					MapleJuicePayload mj_payload = new MapleJuicePayload("TaskStatus");
+
+
+					mj_payload.setByteArray(status);
+
+					Socket sendSocket = mj_payload.sendMapleJuicePacket(nodeName, true);
+					try {
+						WriteLog.writelog(m.myName, "Sending status request to " + nodeName);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					mj_payload.receiveMapleJuicePacket(sendSocket);
+					TaskStatus receivedStatus = (TaskStatus) mj_payload.parseByteArray();
+					try {
+						sendSocket.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					//Print the obtained results
+					boolean mapsCompletedOnNode = false;
+					System.out.println("Status on node " + nodeName +  " :");
+					if (receivedStatus.taskStatus.keySet().size() > 0) {
+						tasksComplete = true;
+						mapsCompletedOnNode = true;
+					}
+					for (String fileName : receivedStatus.taskStatus.keySet())
+					{
+						System.out.println("Filename : " + fileName + " Status : " + receivedStatus.taskStatus.get(fileName));
+						if (receivedStatus.taskStatus.get(fileName).equals("In progress")) {
+							mapsCompletedOnNode = false;
+							tasksComplete = false;
+						}else if (receivedStatus.taskStatus.get(fileName).equals("Failed")) {
+							pendingFileList.add(fileName);
+						}
+					}
+					if (mapsCompletedOnNode) {
+						freeNodeList.add(nodeName);
+						master_task_map.remove(nodeName);
+					}
+
 				}
-				mj_payload.receiveMapleJuicePacket(sendSocket);
-				TaskStatus receivedStatus = (TaskStatus) mj_payload.parseByteArray();
 				try {
-					sendSocket.close();
-				} catch (IOException e) {
+					Thread.sleep(10 * 1000);
+				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				//Print the obtained results
-				boolean mapsCompletedOnNode = false;
-				System.out.println("Status on node " + nodeName +  " :");
-				if (receivedStatus.taskStatus.keySet().size() > 0) {
-					tasksComplete = true;
-					mapsCompletedOnNode = true;
-				}
-				for (String fileName : receivedStatus.taskStatus.keySet())
-				{
-					System.out.println("Filename : " + fileName + " Status : " + receivedStatus.taskStatus.get(fileName));
-					if (receivedStatus.taskStatus.get(fileName).equals("In progress")) {
-						mapsCompletedOnNode = false;
-						tasksComplete = false;
-					}else if (receivedStatus.taskStatus.get(fileName).equals("Failed")) {
-						pendingFileList.add(fileName);
-					}
-				}
-				if (mapsCompletedOnNode) {
-					freeNodeList.add(nodeName);
-					master_task_map.remove(nodeName);
-				}
-				
-			}
-			try {
-				Thread.sleep(10 * 1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			//}
 		}
 
 
