@@ -189,7 +189,10 @@ public class MapleJuiceListener implements Runnable {
 
 		//TODO : This will borrow heavily from the way maple tasks are assigned. 
 
-		freeNodeList = new Vector<String>(num_juices);
+		freeNodeList = new Vector<String>();
+		for (int i = 0; i < num_juices; i++)
+			freeNodeList.add(m.memberList.get(i));
+			
 		pendingFileList = new Vector<String>();
 		//Populate the file list 
 		
