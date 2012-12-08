@@ -50,7 +50,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 		for (String fileInfo : inputFileInfo) {
 			Process temp;
 			try {
-				temp = Runtime.getRuntime().exec("java -jar " + mapleExe + " " + fileInfo);
+				temp = Runtime.getRuntime().exec("java -jar " + mapleExe + " " + fileInfo + " " + mapleTaskId);
 				processList.put(fileInfo, temp);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
