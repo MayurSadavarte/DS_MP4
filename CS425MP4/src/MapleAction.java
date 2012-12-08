@@ -112,7 +112,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 				machine.FileReplicator.sendSDFSPutMessage(file.getName(), newFileName , true);
 				matcher.reset();
 				try {
-					Thread.sleep(10);
+					Thread.sleep(25);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
