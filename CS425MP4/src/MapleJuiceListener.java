@@ -377,8 +377,5 @@ public class MapleJuiceListener implements Runnable {
 				e.printStackTrace();
 			}
 		}
-
-
 	}
-
 }

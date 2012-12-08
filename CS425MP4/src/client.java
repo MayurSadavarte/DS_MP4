@@ -156,6 +156,7 @@ public class client {
 
 			}else if(cmd.startsWith("juice ")) {
 				Vector<String> juiceMsg = new Vector<String>();
+				Vector<String> putMsg = new Vector<String>();
 				Scanner lineScanner = new Scanner(cmd);
 				String command, jarName, sdfsFilePrefix, juiceFileName;
 				Integer numJuices;
@@ -166,7 +167,22 @@ public class client {
 				sdfsFilePrefix = lineScanner.next();
 				juiceFileName = lineScanner.next();
 
-				juiceMsg.add("maple");
+				putMsg.add("P");
+				putMsg.add(jarName);
+				putMsg.add(jarName);
+				putMsg.add(myName);
+				
+				sendMsgToMaster(putMsg, masterIP);
+
+				try {
+					Thread.sleep(1 * 1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				
+				juiceMsg.add("juice");
 				juiceMsg.add(jarName);
 				juiceMsg.add(numJuices.toString());
 				juiceMsg.add(sdfsFilePrefix);
