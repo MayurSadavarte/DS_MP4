@@ -695,7 +695,13 @@ public class FileReplication implements Runnable {
 
 						WriteLog.writelog(m.myName, "Received MAPLE commnd from client");
 
-						m.mapleJuiceListener.processMapleCommand(sdfs_exe, sdfs_files, sdfs_prefix);
+						
+						//TODO
+						//m.mapleJuiceListener.processMapleCommand(sdfs_exe, sdfs_files, sdfs_prefix);
+						
+						Runnable mapleWorker = new MapleJuiceWorker(m, sdfs_exe, sdfs_files, sdfs_prefix);
+						Thread mapleWorkerThread = new Thread(mapleWorker);
+						mapleWorkerThread.start();
 					}
 
 					else if (recvList.firstElement().equalsIgnoreCase("JUICE"))
@@ -714,7 +720,13 @@ public class FileReplication implements Runnable {
 						WriteLog.writelog(m.myName, "Received MAPLE commnd from client");
 						//make sure that all the sdfc_files are already existing in file_system
 
-						m.mapleJuiceListener.processJuiceCommand(sdfs_exe, no_reduce, sdfs_file, sdfs_prefix);
+						
+						//TODO
+						//m.mapleJuiceListener.processJuiceCommand(sdfs_exe, no_reduce, sdfs_file, sdfs_prefix);
+
+						Runnable juiceWorker = new MapleJuiceWorker(m, sdfs_exe, no_reduce, sdfs_file, sdfs_prefix);
+						Thread juiceWorkerThread = new Thread(juiceWorker);
+						juiceWorkerThread.start();
 					}
 				}
 
@@ -747,7 +759,7 @@ public class FileReplication implements Runnable {
 							e.printStackTrace();
 						}
 
-						Runnable runnableClient = new FileTransferClient(copyFN, recvList.elementAt(1), serverIP);
+						Runnable runnableClient = new FileTransferClient(m, copyFN, recvList.elementAt(1), serverIP);
 						Thread thread = new Thread(runnableClient);
 						thread.start();
 
@@ -763,24 +775,17 @@ public class FileReplication implements Runnable {
 							// TODO Auto-generated catch block
 							e3.printStackTrace();
 						}
-						synchronized(runnableClient) {
-							m.myFileList.add(copyFN);
-						}
-						try {
+						//synchronized(runnableClient) {
+						//	m.myFileList.add(copyFN);
+						//}
+						/*try {
 							WriteLog.writelog(m.myName, "COPY completed for "+copyFN);
 						} catch (IOException e3) {
 							// TODO Auto-generated catch block
 							e3.printStackTrace();
-						}
+						}*/
 						//crucial change...will keep waiting here till the myFileList gets populated with the fileID
 						//while(!m.myFileList.contains(copyFN));
-
-						try {
-							WriteLog.writelog(m.myName, "myFileList after COPY - "+m.myFileList.toString());
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 					}
 				}
 				else if (recvList.firstElement().equals("R"))

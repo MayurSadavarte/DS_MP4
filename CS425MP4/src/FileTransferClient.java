@@ -30,9 +30,10 @@ public class FileTransferClient implements Runnable {
 
 	}
 	*/
-	private String copyFN;
-	private String serverIP;
-	private String sourceFN;
+	private Machine machine=null;
+	private String copyFN=null;
+	private String serverIP=null;
+	private String sourceFN=null;
 	private boolean append=false;
 	
 	public FileTransferClient(String copy, String source, String ip){
@@ -48,9 +49,16 @@ public class FileTransferClient implements Runnable {
 		append = appendm;
 	}
 	
+	public FileTransferClient(Machine m, String copy, String source, String ip){
+		machine = m;
+		copyFN = copy;
+		serverIP = ip;
+		sourceFN = source;
+	}
+	
 	public void run(){
 		
-		synchronized(this) {
+		//synchronized(this) {
 			try {
 				WriteLog.writelog(Machine.stName, " thread: file transfer started");
 			} catch (IOException e3) {
@@ -142,8 +150,19 @@ public class FileTransferClient implements Runnable {
 				// TODO Auto-generated catch block
 				e3.printStackTrace();
 			}
+			
+			
+			if(machine!=null) {
+				machine.myFileList.add(copyFN);
+				try {
+					WriteLog.writelog(machine.myName, "myFileList after COPY - "+machine.myFileList.toString());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			//this.notifyAll();
 			//this.notify();
-		}	
+		//}	
 	}
 }
