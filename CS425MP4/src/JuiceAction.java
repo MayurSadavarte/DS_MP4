@@ -42,7 +42,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 		for (String juiceInputFile : juiceInputFileList) {
 			Process juiceProcess;
 			try {
-				juiceProcess = Runtime.getRuntime().exec("java " + juiceExe + " " + juiceInputFile);
+				juiceProcess = Runtime.getRuntime().exec("java -jar" + juiceExe + " " + juiceInputFile);
 				processList.put(juiceInputFile, juiceProcess);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
