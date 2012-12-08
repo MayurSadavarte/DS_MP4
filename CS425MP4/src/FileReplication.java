@@ -496,7 +496,7 @@ public class FileReplication implements Runnable {
 			try {
 				//receive the list of strings from the udp socket
 				recvList = recvListMsg();
-				System.out.println(recvList);
+				//System.out.println(recvList);
 
 				//need to review - instead of using local memberlist we can think of using central memberlist and using locks to synchronize
 				Vector<String> memberList = m.getMemberList();
@@ -505,10 +505,10 @@ public class FileReplication implements Runnable {
 				if (m.master)
 				{
 					//need to take decision based on the recvMsg opcode
-					System.out.println("filereplication: mastermode");
+					//System.out.println("filereplication: mastermode");
 					if (recvList.firstElement().equals("P"))
 					{
-						System.out.println("filereplication PUT received"); 
+						//System.out.println("filereplication PUT received"); 
 						//master receiving PUT
 						// send copy msg to primary machine and backup machine
 						if(m.file_node_map.containsKey(recvList.elementAt(2)) && recvList.lastElement().equalsIgnoreCase("append")){
@@ -519,13 +519,14 @@ public class FileReplication implements Runnable {
 							for(String tNode : tNodes){
 								//sendCOPYMessage for append mode
 								sendCOPYMessage(tNode, recvList.elementAt(1), recvList.elementAt(2), recvList.elementAt(3), true);
-								WriteLog.writelog(m.myName, "Copy msg: Src:" + recvList.elementAt(3) + " Dest: " 
-											+ tNode + " rfile: " + recvList.elementAt(1) + "lfile: " + recvList.elementAt(2));
+								//WriteLog.writelog(m.myName, "Copy msg: Src:" + recvList.elementAt(3) + " Dest: " 
+											//+ tNode + " rfile: " + recvList.elementAt(1) + "lfile: " + recvList.elementAt(2));
 							}
 							
 						} else if(m.file_node_map.containsKey(recvList.elementAt(2))) {
 							WriteLog.writelog(m.myName, "PUT command received for "+recvList.elementAt(2)+ "File, but file already exists in the file system!! hence ignoring PUT");
 						} else {
+							WriteLog.writelog(m.myName, "PUT command received for - lfile: "+recvList.elementAt(1)+", rfile: "+recvList.elementAt(2));
 							Vector<String> sortedKey = sort_node_file_map();
 								
 							//m.sendMsg(m.filerep_sock, sortedKey.firstElement(), , portN)
@@ -550,13 +551,13 @@ public class FileReplication implements Runnable {
 
 							m.file_node_map.put(recvList.elementAt(2), cpnodes);
 
-							try {
+							/*try {
 								WriteLog.writelog(m.myName, "node_file_map after PUT - "+m.node_file_map.toString());
 								WriteLog.writelog(m.myName, "file_node_map after PUT - "+m.file_node_map.toString());
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
-							}
+							}*/
 						}
 
 					}
@@ -663,13 +664,13 @@ public class FileReplication implements Runnable {
 							m.node_file_map.get(RandomNode).add(FileID);
 
 
-							try {
+							/*try {
 								WriteLog.writelog(m.myName, "node_file_map after SDFS_GET - "+m.node_file_map.toString());
 								WriteLog.writelog(m.myName, "file_node_map after SDFS_GET - "+m.file_node_map.toString());
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
-							}
+							}*/
 						}
 					}
 
@@ -717,7 +718,7 @@ public class FileReplication implements Runnable {
 
 						Integer no_reduce = Integer.valueOf(no_juices);
 
-						WriteLog.writelog(m.myName, "Received MAPLE commnd from client");
+						WriteLog.writelog(m.myName, "Received JUICE commnd from client");
 						//make sure that all the sdfc_files are already existing in file_system
 
 						
@@ -752,7 +753,7 @@ public class FileReplication implements Runnable {
 					}
 					else {
 						try {
-							WriteLog.writelog(m.myName, "received COPY, will now start FileTransferClient");
+							//WriteLog.writelog(m.myName, "received COPY, will now start FileTransferClient");
 							WriteLog.writelog(m.myName, "myFileList before COPY - "+m.myFileList.toString());
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -769,12 +770,12 @@ public class FileReplication implements Runnable {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}*/
-						try {
+						/*try {
 							WriteLog.writelog(m.myName, "Received COPY message, copy started for "+copyFN);
 						} catch (IOException e3) {
 							// TODO Auto-generated catch block
 							e3.printStackTrace();
-						}
+						}*/
 						//synchronized(runnableClient) {
 						//	m.myFileList.add(copyFN);
 						//}
