@@ -130,6 +130,21 @@ public class FileReplication implements Runnable {
 		putMsg.add(lFileID);
 		putMsg.add(rFileID);
 		putMsg.add(m.myName);
+		
+		sendListMsg(putMsg, m.masterName);
+	}
+	
+	
+	public void sendSDFSPutMessage(String lFileID, String rFileID, boolean append) {
+		//SDFS_PUT packet - Opcode + Local_FileID + SDFS_FileID + SourceNodeID
+		Vector<String> putMsg = new Vector<String>();
+		putMsg.add("P");
+		putMsg.add(lFileID);
+		putMsg.add(rFileID);
+		putMsg.add(m.myName);
+		if(append) {
+			putMsg.add("append");
+		}
 
 		sendListMsg(putMsg, m.masterName);
 	}
