@@ -189,6 +189,17 @@ public class MapleJuiceListener implements Runnable {
 
 		//TODO : This will borrow heavily from the way maple tasks are assigned. 
 
+		if(num_juices > m.memberList.size()) {
+			try {
+				WriteLog.writelog(m.myName, "Num juices is greater than number of machines. Operation not currently supported");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return;
+		}
+		
 		freeNodeList = new Vector<String>();
 		for (int i = 0; i < num_juices; i++)
 			freeNodeList.add(m.memberList.get(i));
