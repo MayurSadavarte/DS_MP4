@@ -190,7 +190,7 @@ public class MapleJuiceListener implements Runnable {
 		//TODO : This will borrow heavily from the way maple tasks are assigned. 
 
 		freeNodeList = new Vector<String>(m.memberList);
-		pendingFileList = new Vector<String>(filesToProcess);
+		//pendingFileList = new Vector<String>(filesToProcess);
 		for (int j = 0 ; j < freeNodeList.size(); j++) {
 			System.out.println(pendingFileList + "**** + filesToProcess \n\n\n");
 		}
@@ -228,9 +228,9 @@ public class MapleJuiceListener implements Runnable {
 					MapleAction temp = new MapleAction();
 					temp.mapleTaskId = task_id;
 					temp.machineId = j + 1;
-					temp.mapleExe = mapleExe;
+					//temp.mapleExe = mapleExe;
 					temp.inputFileInfo = nodeFileList[j];
-					temp.outputFilePrefix = outputFilePrefix;
+					//temp.outputFilePrefix = outputFilePrefix;
 					MapleJuicePayload mj_payload = new MapleJuicePayload("MapleTask");
 					mj_payload.setByteArray(temp);
 					System.out.println("Sending payload to " + freeNodeList.elementAt(j) );
