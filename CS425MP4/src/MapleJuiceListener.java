@@ -189,8 +189,23 @@ public class MapleJuiceListener implements Runnable {
 
 		//TODO : This will borrow heavily from the way maple tasks are assigned. 
 
-		freeNodeList = new Vector<String>(m.memberList);
-		//pendingFileList = new Vector<String>(filesToProcess);
+		freeNodeList = new Vector<String>(num_juices);
+		pendingFileList = new Vector<String>();
+		//Populate the file list 
+		
+		Pattern pattern = Pattern.compile("prefix_");
+				
+		for(String file : m.file_node_map.keySet()) {
+			Matcher matcher = pattern.matcher(file);
+			
+			if(matcher.find()) {
+				pendingFileList.add(file);
+				matcher.reset();
+				continue;
+			}
+		}
+		
+		
 		for (int j = 0 ; j < freeNodeList.size(); j++) {
 			System.out.println(pendingFileList + "**** + filesToProcess \n\n\n");
 		}
@@ -219,6 +234,7 @@ public class MapleJuiceListener implements Runnable {
 
 				}
 				pendingFileList.clear();
+				
 				int j;
 				System.out.println(freeNodeList);
 				for (int z =0; z < freeNodeList.size(); z++) {
@@ -228,12 +244,12 @@ public class MapleJuiceListener implements Runnable {
 					MapleAction temp = new MapleAction();
 					temp.mapleTaskId = task_id;
 					temp.machineId = j + 1;
-					//temp.mapleExe = mapleExe;
+					temp.mapleExe = juiceExe;
 					temp.inputFileInfo = nodeFileList[j];
-					//temp.outputFilePrefix = outputFilePrefix;
-					MapleJuicePayload mj_payload = new MapleJuicePayload("MapleTask");
+					temp.outputFilePrefix = outputsdfsFileName;
+					MapleJuicePayload mj_payload = new MapleJuicePayload("JuiceTask");
 					mj_payload.setByteArray(temp);
-					System.out.println("Sending payload to " + freeNodeList.elementAt(j) );
+					System.out.println("Sending payload to " + freeNodeList.elementAt(j));
 					mj_payload.sendMapleJuicePacket(freeNodeList.elementAt(j), false);
 					if (!master_task_map.containsKey(freeNodeList.elementAt(j))) {
 						master_task_map.put(freeNodeList.elementAt(j), nodeFileList[j]);
@@ -279,23 +295,23 @@ public class MapleJuiceListener implements Runnable {
 						e.printStackTrace();
 					}
 					//Print the obtained results
-					boolean mapsCompletedOnNode = false;
+					boolean juicesCompletedOnNode = false;
 					System.out.println("Status on node " + nodeName +  " :");
 					if (receivedStatus.taskStatus.keySet().size() > 0) {
 						//tasksComplete = true;
-						mapsCompletedOnNode = true;
+						juicesCompletedOnNode = true;
 					}
 					for (String fileName : receivedStatus.taskStatus.keySet())
 					{
 						System.out.println("Filename : " + fileName + " Status : " + receivedStatus.taskStatus.get(fileName));
 						if (receivedStatus.taskStatus.get(fileName).equals("In progress")) {
-							mapsCompletedOnNode = false;
+							juicesCompletedOnNode = false;
 							tasksComplete = false;
 						}else if (receivedStatus.taskStatus.get(fileName).equals("Failed")) {
 							pendingFileList.add(fileName);
 						}
 					}
-					if (mapsCompletedOnNode) {
+					if (juicesCompletedOnNode) {
 						freeNodeList.add(nodeName);
 						master_task_map.remove(nodeName);
 					}
@@ -311,94 +327,6 @@ public class MapleJuiceListener implements Runnable {
 			}
 		}while(!tasksComplete || (pendingFileList != null && pendingFileList.size() > 0));
 
-
-
-		/*
-		int i = 0;
-		task_id++;
-
-		Iterator<String> iter = m.file_node_map.keySet().iterator();
-
-		//I should only find files with names of the form : prefix_inter_key. Search for _inter_
-		Pattern pattern = Pattern.compile(sdfsFilePrefix + "_inter_" + "[.]+");
-		while(iter.hasNext()) {
-			Vector<String> filesOfNode = m.file_node_map.get(iter.next());
-
-			for(String file : filesOfNode) {
-				Matcher matcher = pattern.matcher(file);
-
-				if(matcher.find()) {
-					nodeFileList.get(i).add(file);
-					i = (i + 1) % num_juices;
-					matcher.reset();
-					continue;
-				}				
-			}			
-		}
-
-
-		for (int j = 0 ; ((j < m.memberList.size()) && ( j < num_juices)); j++) {
-			JuiceAction juiceAction = new JuiceAction();
-			juiceAction.juiceTaskId= task_id;
-			juiceAction.machineId = j + 1;
-			juiceAction.juiceExe = juiceExe;
-			juiceAction.juiceInputFileList = nodeFileList.get(j);
-			juiceAction.juiceOutputFile = outputsdfsFileName;
-			MapleJuicePayload mj_payload = new MapleJuicePayload("JuiceTask");
-			mj_payload.setByteArray(juiceAction);
-			mj_payload.sendMapleJuicePacket(m.memberList.elementAt(j), false);
-		} 
-
-		
-		////From here I've copied from the the maple.
-		TaskStatus status = new TaskStatus();
-		status.taskId = task_id;
-		status.messageType = new String("get");
-		//Monitor the progress on the node every 10 seconds
-		tasksComplete = true;
-		for (String nodeName : master_task_map.keySet() ) {
-
-			MapleJuicePayload mj_payload = new MapleJuicePayload("TaskStatus");
-
-			mj_payload.setByteArray(status);
-
-			Socket sendSocket = mj_payload.sendMapleJuicePacket(nodeName, true);
-			try {
-				WriteLog.writelog(m.myName, "Sending status request to " + nodeName);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			mj_payload.receiveMapleJuicePacket(sendSocket);
-			TaskStatus receivedStatus = (TaskStatus) mj_payload.parseByteArray();
-			//Print the obtained results
-			boolean juicesCompletedOnNode = true;
-			System.out.println("Status on node " + nodeName +  " :");
-			for (String fileName : receivedStatus.taskStatus.keySet())
-			{
-				System.out.println("Filename : " + fileName + " Status : " + receivedStatus.taskStatus.get(fileName));
-				if (receivedStatus.taskStatus.get(fileName).equals("In progress")) {
-					juicesCompletedOnNode = false;
-					tasksComplete = false;
-				}else if (receivedStatus.taskStatus.get(fileName).equals("Failed")) {
-					pendingFileList.add(fileName);
-				}
-			}
-			if (juicesCompletedOnNode) {
-				freeNodeList.add(nodeName);
-				master_task_map.remove(nodeName);
-			}
-			try {
-				Thread.sleep(10 * 1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		////Until here this is copied from the maple tasks
-		 */
 	}
 
 	@Override

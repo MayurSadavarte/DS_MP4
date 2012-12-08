@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 import java.io.*;
 
 
-//Payload for sending Maple Action Payload to worker nodes
+//Payload for sending Juice Action Payload to worker nodes
 public class JuiceAction extends GenericPayload implements Serializable{
 
 	/**
@@ -17,7 +17,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 	ArrayList<String> 	juiceInputFileList;
 	String              juiceOutputFile; 
 	//@Override
-	/*public MapleAction(Machine machine) {
+	/*public JuiceleAction(Machine machine) {
 		m = machine;
 	}*/
 	@Override
@@ -52,7 +52,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 
 		}
 		
-		//TODO : the task_map will contain the IDs of the maple task they executed. Now we don't need them. 
+		//TODO : the task_map will contain the IDs of the juice task they executed. Now we don't need them. 
 		//Needs to be removed
 		MapleJuiceListener.task_map.put(new Integer(juiceTaskId), new HashMap<String, Process>(processList));
 		int index = 0;
@@ -79,7 +79,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 			}
 		}
 		
-		String path = "./bin/";
+		String path = ".";
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		Pattern pattern = Pattern.compile("juice_inter_" + juiceTaskId);
@@ -97,6 +97,12 @@ public class JuiceAction extends GenericPayload implements Serializable{
 				
 				machine.FileReplicator.sendSDFSPutMessage(file.getName(), juiceOutputFile, true);
 				matcher.reset();
+				try {
+					Thread.sleep(25);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				continue;
 			}
 		}
