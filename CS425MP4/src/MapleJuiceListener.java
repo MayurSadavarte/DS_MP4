@@ -191,13 +191,14 @@ public class MapleJuiceListener implements Runnable {
 
 		if(num_juices > m.memberList.size()) {
 			try {
-				WriteLog.writelog(m.myName, "Num juices is greater than number of machines. Operation not currently supported");
+				WriteLog.writelog(m.myName, "Num juices is greater than number of machines. Limiting number oj juices to available number of nodes available");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			num_juices = m.memberList.size();
 			
-			return;
+			//return;
 		}
 		
 		freeNodeList = new Vector<String>();
