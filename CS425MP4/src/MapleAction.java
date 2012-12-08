@@ -90,7 +90,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 		}
 		
 		//Now it is time to put the outputs of the juices over SDFS.
-		String path = "./bin/";
+		String path = "./";
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		Pattern pattern = Pattern.compile("inter_" + mapleTaskId);
