@@ -1,6 +1,8 @@
 
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.*;
 
 
@@ -69,7 +71,9 @@ public class MapleAction extends GenericPayload implements Serializable{
 				if(result == 0) {
 					//Process exited successfully.
 					System.out.println("Process completed successfully ");
-					//machine.FileReplicator.sendSDFSPutMessage(fileName, fileName);
+					//We need to iterate over the files in the directory to find the list of files of the form
+					//prefix_inter_k, and
+					
 					
 				} else {
 					//Process exited abnormally.
@@ -85,8 +89,27 @@ public class MapleAction extends GenericPayload implements Serializable{
 
 		}
 		
+		//Now it is time to put the outputs of the juices over SDFS.
+		String path = "./bin/";
+		File folder = new File(path);
+		File[] listOfFiles = folder.listFiles();
+		Pattern pattern = Pattern.compile(outputFilePrefix + "_inter_" );
 		
+		for(File file : listOfFiles) {
+			Matcher matcher = pattern.matcher(file.getName());						
+			if(matcher.find()) {
+				
+				try {
+					WriteLog.writelog(machine.myName, "Sending PUT msg for file " + file.getName());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				machine.FileReplicator.sendSDFSPutMessage(file.getName(), file.getName());
+				matcher.reset();
+				continue;
+			}
+		}
 	}
-
-
 }

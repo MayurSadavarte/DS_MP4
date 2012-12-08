@@ -144,7 +144,14 @@ public class client {
 				for(String sdfsFile : sdfsFiles) {
 					mapleMsg.add(sdfsFile);
 				}
-
+				
+				try {
+					Thread.sleep(1 * 1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				sendMsgToMaster(mapleMsg, masterIP);
 
 			}else if(cmd.startsWith("juice ")) {

@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.*;
 
 
@@ -59,10 +61,10 @@ public class JuiceAction extends GenericPayload implements Serializable{
 				index++;
 				process.waitFor();
 				int result = process.exitValue();
-				WriteLog.writelog(machine.myName, "Maple Task  " + juiceInputFile + "exited with code " + result);
+				WriteLog.writelog(machine.myName, "Juice Task  " + juiceInputFile + "exited with code " + result);
 				
 				if(result == 0) { //If process exited successfully
-					machine.FileReplicator.sendSDFSPutMessage(juiceInputFile, "juice_inter_" + juiceOutputFile);
+					
 				}else {
 					//Do nothing.
 				}
@@ -73,6 +75,27 @@ public class JuiceAction extends GenericPayload implements Serializable{
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+		}
+		
+		String path = "./bin/";
+		File folder = new File(path);
+		File[] listOfFiles = folder.listFiles();
+		Pattern pattern = Pattern.compile("juice_inter_" );
+		
+		for(File file : listOfFiles) {
+			Matcher matcher = pattern.matcher(file.getName());						
+			if(matcher.find()) {
+				try {
+					WriteLog.writelog(machine.myName, "Sending PUT msg for file " + file.getName());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				machine.FileReplicator.sendSDFSPutMessage(file.getName(), file.getName());
+				matcher.reset();
+				continue;
 			}
 		}
 	}
