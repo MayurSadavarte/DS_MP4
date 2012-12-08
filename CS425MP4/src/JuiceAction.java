@@ -81,7 +81,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 		String path = "./bin/";
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
-		Pattern pattern = Pattern.compile("juice_inter_" );
+		Pattern pattern = Pattern.compile("juice_inter_" + juiceTaskId);
 		
 		for(File file : listOfFiles) {
 			Matcher matcher = pattern.matcher(file.getName());						

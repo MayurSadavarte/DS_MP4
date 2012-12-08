@@ -93,7 +93,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 		String path = "./bin/";
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
-		Pattern pattern = Pattern.compile(outputFilePrefix + "_inter_" );
+		Pattern pattern = Pattern.compile("inter_" + mapleTaskId);
 		
 		for(File file : listOfFiles) {
 			Matcher matcher = pattern.matcher(file.getName());						
