@@ -100,7 +100,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 			if(matcher.find()) {
 				String fileName = file.getName();
 				String[] tokens = fileName.split("_");
-				String newFileName = outputFilePrefix + tokens[tokens.length - 1];
+				String newFileName = outputFilePrefix + "_" + tokens[tokens.length - 1];
 				
 				try {
 					WriteLog.writelog(machine.myName, "Sending PUT msg for file " + file.getName());
