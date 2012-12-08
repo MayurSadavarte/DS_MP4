@@ -98,6 +98,9 @@ public class MapleAction extends GenericPayload implements Serializable{
 		for(File file : listOfFiles) {
 			Matcher matcher = pattern.matcher(file.getName());						
 			if(matcher.find()) {
+				String fileName = file.getName();
+				String[] tokens = fileName.split("_");
+				String newFileName = outputFilePrefix + tokens[tokens.length - 1];
 				
 				try {
 					WriteLog.writelog(machine.myName, "Sending PUT msg for file " + file.getName());
@@ -106,7 +109,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 					e.printStackTrace();
 				}
 				
-				machine.FileReplicator.sendSDFSPutMessage(file.getName(), file.getName(), true);
+				machine.FileReplicator.sendSDFSPutMessage(file.getName(), newFileName , true);
 				matcher.reset();
 				continue;
 			}
