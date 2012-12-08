@@ -93,6 +93,22 @@ public class FileReplication implements Runnable {
 	}
 
 
+	private void sendCOPYMessage(String tNodeID, String rFile, String lFile, String nodeID, boolean append) {
+		Vector<String> msgList=new Vector<String>();
+		msgList.add("C");
+		msgList.add(rFile);
+		msgList.add(lFile);
+		msgList.add(nodeID);
+		if(append) {
+			msgList.add("append");
+		}
+
+		sendListMsg(msgList, tNodeID);
+	}
+
+	
+	
+	
 	public void sendSDFSGetMessage(String FileID) {
 		//SDFC_GET packet - Opcode + SDFS_FileID + SourceNodeID
 		String opcode = "SDFS_GET";
@@ -501,7 +517,8 @@ public class FileReplication implements Runnable {
 							Vector<String> tNodes = m.file_node_map.get(recvList.elementAt(2));
 							
 							for(String tNode : tNodes){
-								sendCOPYMessage(tNode, recvList.elementAt(1), recvList.elementAt(2), recvList.elementAt(3));
+								//sendCOPYMessage for append mode
+								sendCOPYMessage(tNode, recvList.elementAt(1), recvList.elementAt(2), recvList.elementAt(3), true);
 								WriteLog.writelog(m.myName, "Copy msg: Src:" + recvList.elementAt(3) + " Dest: " 
 											+ tNode + " rfile: " + recvList.elementAt(1) + "lfile: " + recvList.elementAt(2));
 							}
@@ -709,47 +726,61 @@ public class FileReplication implements Runnable {
 					String copyFN = recvList.elementAt(2);
 					String serverIP = recvList.elementAt(3);//TODO get client ip
 
-					try {
-						WriteLog.writelog(m.myName, "received COPY, will now start FileTransferClient");
-						WriteLog.writelog(m.myName, "myFileList before COPY - "+m.myFileList.toString());
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					if(recvList.lastElement().equalsIgnoreCase("append")) {
+						try {
+							WriteLog.writelog(m.myName, "received COPY, for "+copyFN+"with the APPEND mode set");
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						Runnable runnableClient = new FileTransferClient(copyFN, recvList.elementAt(1), serverIP, true);
+						Thread thread = new Thread(runnableClient);
+						thread.start();
+	
 					}
+					else {
+						try {
+							WriteLog.writelog(m.myName, "received COPY, will now start FileTransferClient");
+							WriteLog.writelog(m.myName, "myFileList before COPY - "+m.myFileList.toString());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
-					Runnable runnableClient = new FileTransferClient(copyFN, recvList.elementAt(1), serverIP);
-					Thread thread = new Thread(runnableClient);
-					thread.start();
+						Runnable runnableClient = new FileTransferClient(copyFN, recvList.elementAt(1), serverIP);
+						Thread thread = new Thread(runnableClient);
+						thread.start();
 
-					/*try {
+						/*try {
 						thread.wait();
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}*/
-					try {
-						WriteLog.writelog(m.myName, "Received COPY message, copy started for "+copyFN);
-					} catch (IOException e3) {
-						// TODO Auto-generated catch block
-						e3.printStackTrace();
-					}
-					synchronized(runnableClient) {
-						m.myFileList.add(copyFN);
-					}
-					try {
-						WriteLog.writelog(m.myName, "COPY completed for "+copyFN);
-					} catch (IOException e3) {
-						// TODO Auto-generated catch block
-						e3.printStackTrace();
-					}
-					//crucial change...will keep waiting here till the myFileList gets populated with the fileID
-					//while(!m.myFileList.contains(copyFN));
+						try {
+							WriteLog.writelog(m.myName, "Received COPY message, copy started for "+copyFN);
+						} catch (IOException e3) {
+							// TODO Auto-generated catch block
+							e3.printStackTrace();
+						}
+						synchronized(runnableClient) {
+							m.myFileList.add(copyFN);
+						}
+						try {
+							WriteLog.writelog(m.myName, "COPY completed for "+copyFN);
+						} catch (IOException e3) {
+							// TODO Auto-generated catch block
+							e3.printStackTrace();
+						}
+						//crucial change...will keep waiting here till the myFileList gets populated with the fileID
+						//while(!m.myFileList.contains(copyFN));
 
-					try {
-						WriteLog.writelog(m.myName, "myFileList after COPY - "+m.myFileList.toString());
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						try {
+							WriteLog.writelog(m.myName, "myFileList after COPY - "+m.myFileList.toString());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 				else if (recvList.firstElement().equals("R"))

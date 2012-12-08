@@ -42,7 +42,8 @@ public class JuiceAction extends GenericPayload implements Serializable{
 		for (String juiceInputFile : juiceInputFileList) {
 			Process juiceProcess;
 			try {
-				juiceProcess = Runtime.getRuntime().exec("java " + juiceExe + " " + juiceInputFile + " " + juiceTaskId);
+
+				juiceProcess = Runtime.getRuntime().exec("java -jar" + juiceExe + " " + juiceInputFile + " " + juiceTaskId);
 				processList.put(juiceInputFile, juiceProcess);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -86,6 +87,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 		for(File file : listOfFiles) {
 			Matcher matcher = pattern.matcher(file.getName());						
 			if(matcher.find()) {
+				
 				try {
 					WriteLog.writelog(machine.myName, "Sending PUT msg for file " + file.getName());
 				} catch (IOException e) {
@@ -93,7 +95,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 					e.printStackTrace();
 				}
 				
-				machine.FileReplicator.sendSDFSPutMessage(file.getName(), file.getName(), true);
+				machine.FileReplicator.sendSDFSPutMessage(file.getName(), juiceOutputFile, true);
 				matcher.reset();
 				continue;
 			}

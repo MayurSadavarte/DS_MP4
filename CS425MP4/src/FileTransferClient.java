@@ -33,11 +33,19 @@ public class FileTransferClient implements Runnable {
 	private String copyFN;
 	private String serverIP;
 	private String sourceFN;
+	private boolean append=false;
 	
 	public FileTransferClient(String copy, String source, String ip){
 		copyFN = copy;
 		serverIP = ip;
 		sourceFN = source;
+	}
+	
+	public FileTransferClient(String copy, String source, String ip, boolean appendm){
+		copyFN = copy;
+		serverIP = ip;
+		sourceFN = source;
+		append = appendm;
 	}
 	
 	public void run(){
@@ -91,7 +99,12 @@ public class FileTransferClient implements Runnable {
 				byte [] mybytearray  = new byte [fixedsize];
 				InputStream is;
 				is = sock.getInputStream();
-				FileOutputStream fos = new FileOutputStream(copyFN);
+				FileOutputStream fos=null;
+				if(append) {
+					fos = new FileOutputStream(copyFN, true);
+				} else {
+					fos = new FileOutputStream(copyFN, false);
+				}
 				BufferedOutputStream bos = new BufferedOutputStream(fos);
 				//bytesRead = is.read(mybytearray,0,mybytearray.length);
 				//current = bytesRead;
