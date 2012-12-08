@@ -93,7 +93,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 					e.printStackTrace();
 				}
 				
-				machine.FileReplicator.sendSDFSPutMessage(file.getName(), file.getName());
+				machine.FileReplicator.sendSDFSPutMessage(file.getName(), file.getName(), true);
 				matcher.reset();
 				continue;
 			}
