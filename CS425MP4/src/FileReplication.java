@@ -214,12 +214,12 @@ public class FileReplication implements Runnable {
 				return (firstLength - secondLength);
 			}
 		});
-		try {
+		/*try {
 			WriteLog.writelog(m.myName, "sorted file_node_map - "+ keys.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		return keys;  //TODO need to verify that sorting on tempkeys actually affects also keys
 	}
 
@@ -263,8 +263,8 @@ public class FileReplication implements Runnable {
 
 		try {
 			WriteLog.writelog(m.myName, "balancefiles called ");
-			WriteLog.writelog(m.myName, "initial node_file_keys - "+node_file_keys.toString());
-			WriteLog.writelog(m.myName, "initial file_node_keys - "+file_node_keys.toString());
+			//WriteLog.writelog(m.myName, "initial node_file_keys - "+node_file_keys.toString());
+			//WriteLog.writelog(m.myName, "initial file_node_keys - "+file_node_keys.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -598,13 +598,13 @@ public class FileReplication implements Runnable {
 							m.node_file_map.get(key).remove(recvList.elementAt(1));
 						}
 						m.file_node_map.remove(recvList.elementAt(1));
-						try {
+						/*try {
 							WriteLog.writelog(m.myName, "node_file_map after DELETE - "+m.node_file_map.toString());
 							WriteLog.writelog(m.myName, "file_node_map after DELETE - "+m.file_node_map.toString());
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}*/
 					}
 					else if (recvList.firstElement().equals("I"))
 					{
