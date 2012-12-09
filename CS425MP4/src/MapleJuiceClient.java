@@ -43,9 +43,6 @@ public class MapleJuiceClient {
 
 	public void send(){
 
-
-
-
 		try {
 			WriteLog.writelog(Machine.stName, "Sending mapleJuicePayload to : " + target);
 		} catch (IOException e1) {

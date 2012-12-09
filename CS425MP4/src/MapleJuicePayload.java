@@ -113,6 +113,9 @@ public class MapleJuicePayload implements Serializable{
 		MapleJuiceClient mapleJuiceClient = new MapleJuiceClient(this, socket);
 		mapleJuiceClient.send();
 	}
+	
+	
+	
 	public void receiveMapleJuicePacket(Socket socket) {
 		ObjectInputStream ois = null;
 		InputStream sim = null;

@@ -127,8 +127,11 @@ public class ContactAddRemove implements Runnable {
 								m.master = true;
 								m.file_node_map = new HashMap<String, Vector<String>>();
 								m.node_file_map = new HashMap<String, Vector<String>>();
-								m.FileReplicator.reformFileInfo();
+								//m.FileReplicator.reformFileInfo();
 								//TODO: code required to be put here to regenerate maplejuice metadata
+							
+								MasterRecoveryClient recClient = new MasterRecoveryClient(m);
+								recClient.RecoverMasterInfo();
 							}
 						}
 						

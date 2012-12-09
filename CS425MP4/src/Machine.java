@@ -24,6 +24,7 @@ public class Machine {
 	public static final int MAPLE_JUICE_PORT = 8893;
 	public static final int HEARTBEAT_PORT = 8890;
 	public static final int QUERY_PORT = 10000;
+	public static final int MASTER_RECOVERY_PORT = 10002;
 	
 	public DatagramSocket membership_sock;
 	public DatagramSocket heartbeat_sock=null;
@@ -172,7 +173,15 @@ public class Machine {
 		
 	}
 	
+	/*
+	 * start master recovery server thread here
+	 */
 	
+	public void startMasterRecoveryThread() {
+		Runnable runnable = new MasterRecoveryServer(this);
+		Thread thread = new Thread(runnable);
+		thread.start();
+	}
 	/*
 	 * start the AddRem instance of machine
 	 * this instance will take care of membership list management 
@@ -248,6 +257,7 @@ public class Machine {
 
 		m.startFileReplication();
 		m.startMapleJuiceListener();
+		m.startMasterRecoveryThread();
 		
 		try {
 			WriteLog.printList2Log(m.myName, m.memberList);
