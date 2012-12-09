@@ -1,5 +1,6 @@
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -119,12 +120,13 @@ public class client {
 				Vector<String> mapleMsg = new Vector<String>();
 				Vector<String> putMsg = new Vector<String>();
 				Scanner lineScanner = new Scanner(cmd);
-				String command, jarName, sdfsFilePrefix;
-				Vector<String> sdfsFiles = new Vector<String>();
+				String command, jarName, sdfsFilePrefix, dirPath;
+				File[] listFiles = null;
 
 				command = lineScanner.next();
 				jarName = lineScanner.next();
 				sdfsFilePrefix = lineScanner.next();
+				dirPath = lineScanner.next();
 
 				putMsg.add("P");
 				putMsg.add(jarName);
@@ -132,21 +134,53 @@ public class client {
 				putMsg.add(myName);
 				
 				sendMsgToMaster(putMsg, masterIP);
-
-				while(lineScanner.hasNext()){
-					sdfsFiles.add(lineScanner.next());
+				try {
+					Thread.sleep(1 * 100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				File directory = new File(dirPath);
+				listFiles = directory.listFiles();
+				for(File tfile: listFiles){
+					if (tfile.isFile()) 
+					{
+						String filename = tfile.getName();
+						String dirname = directory.getName();
+						System.out.println(filename);
+						putMsg = new Vector<String>();
+						
+						putMsg.add("P");
+						putMsg.add(dirname+filename);
+						putMsg.add("mj_"+filename);
+						putMsg.add(myName);
+						System.out.println("client sending "+putMsg+" to master");
+						sendMsgToMaster(putMsg, masterIP);
+						try {
+							Thread.sleep(1 * 100);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
 
 				mapleMsg.add("maple");
 				mapleMsg.add(jarName);
 				mapleMsg.add(sdfsFilePrefix);
 
-				for(String sdfsFile : sdfsFiles) {
+				/*for(String sdfsFile : sdfsFiles) {
 					mapleMsg.add(sdfsFile);
+				}*/
+				for(File tfile: listFiles){
+					String filename = tfile.getName();
+					mapleMsg.add("mj_"+filename);
 				}
 				
+				System.out.println("client sending "+mapleMsg+" to master");
 				try {
-					Thread.sleep(1 * 1000);
+					Thread.sleep(1 * 500);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
