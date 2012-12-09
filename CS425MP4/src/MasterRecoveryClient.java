@@ -21,9 +21,10 @@ public class MasterRecoveryClient {
 		}
 		
 		Socket sock=null;
-		
+		MasterRecoveryPacket mrPacket = null;
+		String indMember=null;
 		for(String member: machine.memberList) {
-			
+			indMember=member;
 			try {
 				sock = new Socket(member, Machine.MASTER_RECOVERY_PORT);
 				//responseRequired = false;
@@ -42,7 +43,7 @@ public class MasterRecoveryClient {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			MasterRecoveryPacket mrPacket = null;
+			
 			try {
 				//mjPayload = new MapleJuicePayload();
 				
@@ -79,7 +80,14 @@ public class MasterRecoveryClient {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+		
+
+			try {
+				WriteLog.writelog(machine.myName, "MasterRecovery: received - "+mrPacket.myFileList+" from "+indMember);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		try {

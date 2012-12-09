@@ -128,10 +128,11 @@ public class ContactAddRemove implements Runnable {
 								m.file_node_map = new HashMap<String, Vector<String>>();
 								m.node_file_map = new HashMap<String, Vector<String>>();
 								//m.FileReplicator.reformFileInfo();
-								//TODO: code required to be put here to regenerate maplejuice metadata
 							
 								MasterRecoveryClient recClient = new MasterRecoveryClient(m);
 								recClient.RecoverMasterInfo();
+								
+								//TODO: call monitoring code here
 							}
 						}
 						
@@ -153,6 +154,7 @@ public class ContactAddRemove implements Runnable {
 							//call to filereplicator for balancing maps
 							m.FileReplicator.balanceFiles();
 							//call to maplejuicelistener to respawn relevant tasks
+							WriteLog.writelog(m.myName, "Node failure detected, calling processNodeFailure for mapleJuiceListener");
 							m.mapleJuiceListener.processNodeFailure(ip);
 						}
 					}
