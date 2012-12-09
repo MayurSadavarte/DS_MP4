@@ -301,7 +301,11 @@ public class MapleJuiceListener implements Runnable {
 					MapleJuicePayload mj_payload = new MapleJuicePayload("JuiceTask");
 					mj_payload.setByteArray(temp);
 					System.out.println("Sending payload to " + freeNodeList.elementAt(j));
-					mj_payload.sendMapleJuicePacket(freeNodeList.elementAt(j), false);
+					try {
+						mj_payload.sendMapleJuicePacket(freeNodeList.elementAt(j), false);
+					}catch (ConnectException c) {
+						System.out.println("Send failure");
+					}
 					if (!master_task_map.containsKey(freeNodeList.elementAt(j))) {
 						master_task_map.put(freeNodeList.elementAt(j), nodeFileList[j]);
 					}
@@ -335,7 +339,7 @@ public class MapleJuiceListener implements Runnable {
 
 
 					mj_payload.setByteArray(status);
-
+                    try {
 					Socket sendSocket = mj_payload.sendMapleJuicePacket(nodeName, true);
 					try {
 						WriteLog.writelog(m.myName, "Sending status request to " + nodeName);
@@ -387,7 +391,9 @@ public class MapleJuiceListener implements Runnable {
 						master_task_map.remove(nodeName);
 					}*/
 
-
+                    }catch (ConnectException c) {
+                    	System.out.println("Send Failed");
+                    }
 				}
 			}
 
