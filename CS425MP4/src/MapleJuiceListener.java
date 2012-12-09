@@ -32,6 +32,9 @@ public class MapleJuiceListener implements Runnable {
 	}
 
 	public void processNodeFailure(String nodeName) {
+		if (m.master == false) {
+			return;
+		}
 		try {
 			WriteLog.writelog(m.myName, "Node " + nodeName + "has failed. Adding it's files to pending file list");
 		} catch (IOException e) {
