@@ -59,7 +59,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 						
 						process.waitFor();
 						int result = process.exitValue();
-						WriteLog.writelog(machine.myName, "Juice Task  " + juiceInputFile + "exited with code " + result);
+						WriteLog.writelog(machine.myName, "Juice Task  " + juiceFile + "exited with code " + result);
 
 						if(result == 0) { //If process exited successfully
 
