@@ -256,12 +256,12 @@ public class MapleJuiceListener implements Runnable {
 					System.out.println(nodeFileList[z]);
 				}
 				for ( j = 0 ; ((j < freeNodeList.size()) && (nodeFileList[j].size() > 0)); j++) {
-					MapleAction temp = new MapleAction();
-					temp.mapleTaskId = task_id;
+					JuiceAction temp = new JuiceAction();
+					temp.juiceTaskId = task_id;
 					temp.machineId = j + 1;
-					temp.mapleExe = juiceExe;
-					temp.inputFileInfo = nodeFileList[j];
-					temp.outputFilePrefix = outputsdfsFileName;
+					temp.juiceExe = juiceExe;
+					temp.juiceInputFileList = nodeFileList[j];
+					temp.juiceOutputFile = outputsdfsFileName;
 					MapleJuicePayload mj_payload = new MapleJuicePayload("JuiceTask");
 					mj_payload.setByteArray(temp);
 					System.out.println("Sending payload to " + freeNodeList.elementAt(j));
