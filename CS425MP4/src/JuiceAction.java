@@ -56,7 +56,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 				for (String juiceFile  : processList.keySet()) {
 					try {
 						Process process = processList.get(juiceFile);
-						i++;
+						
 						process.waitFor();
 						int result = process.exitValue();
 						WriteLog.writelog(machine.myName, "Juice Task  " + juiceInputFile + "exited with code " + result);
@@ -75,8 +75,9 @@ public class JuiceAction extends GenericPayload implements Serializable{
 						e.printStackTrace();
 					}
 				}
+				processList.clear();
 			}
-			processList.clear();
+			
 		}
 
 
