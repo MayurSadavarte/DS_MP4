@@ -26,6 +26,12 @@ public class JuiceAction extends GenericPayload implements Serializable{
 		System.out.println(juiceTaskId);
 	}
 	public void processJuiceActionPayload(Machine machine) {
+		HashMap<String, Process> temp = new HashMap<String, Process>();
+		
+		for (String juiceInputFile : juiceInputFileList) {
+			temp.put(juiceInputFile, (Process)null);
+		}
+		MapleJuiceListener.task_map.put(new Integer(juiceTaskId), new HashMap<String, Process>(temp));
 		//TODO : Mayur Get the exe and the files from SDFS
 		if (!machine.myFileList.contains(juiceExe)) {
 			machine.FileReplicator.sendSDFSGetMessage(juiceExe);
@@ -37,15 +43,17 @@ public class JuiceAction extends GenericPayload implements Serializable{
 			//machine.FileReplicator.sendSDFSGetMessage(fileInfo);
 		}
 		//TODO : Synchronization
-		HashMap<String, Process> processList = new HashMap<String, Process>();
+		
 		int i =0;
-
+		HashMap<String, Process> processList = new HashMap<String, Process>();
 		for (String juiceInputFile : juiceInputFileList) {
 
 			Process juiceProcess;
 			try {
 				i++;
 				juiceProcess = Runtime.getRuntime().exec("java -jar " + juiceExe + " " + juiceInputFile + " " + juiceTaskId);
+				MapleJuiceListener.task_map.get(juiceTaskId).remove(juiceInputFile);
+				MapleJuiceListener.task_map.get(juiceTaskId).put(juiceInputFile, juiceProcess);
 				processList.put(juiceInputFile, juiceProcess);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -83,7 +91,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 
 		//TODO : the task_map will contain the IDs of the juice task they executed. Now we don't need them. 
 		//Needs to be removed
-		MapleJuiceListener.task_map.put(new Integer(juiceTaskId), new HashMap<String, Process>(processList));
+		
 		int index = 0;
 		for (String juiceInputFile  : processList.keySet()) {
 			try {
