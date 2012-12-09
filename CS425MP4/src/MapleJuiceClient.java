@@ -8,7 +8,7 @@ public class MapleJuiceClient {
 	boolean ResponseRequired;
 	//String myName;
 
-	public MapleJuiceClient(MapleJuicePayload payload, String target, boolean responseRequired){
+	public MapleJuiceClient(MapleJuicePayload payload, String target, boolean responseRequired) throws ConnectException {
 		this.target = target;
 		this.payload = payload;
 		sock = null;
@@ -41,7 +41,7 @@ public class MapleJuiceClient {
 
 
 
-	public void send(){
+	public void send() throws ConnectException {
 
 		try {
 			WriteLog.writelog(Machine.stName, "Sending mapleJuicePayload to : " + target);

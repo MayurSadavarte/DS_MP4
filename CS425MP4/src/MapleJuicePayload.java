@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.*;
 
@@ -89,7 +90,7 @@ public class MapleJuicePayload implements Serializable{
 		return generic_action;
 	}
 	
-	public Socket sendMapleJuicePacket(String targetNode, boolean responseRequired) {
+	public Socket sendMapleJuicePacket(String targetNode, boolean responseRequired)  throws ConnectException{
 		//Socket sock;
 		try {
 			WriteLog.writelog(Machine.stName, "Initiating Sending of  MapleJuicePayload (" + messageType + " ) to "+targetNode);
@@ -103,7 +104,7 @@ public class MapleJuicePayload implements Serializable{
 		return mapleJuiceClient.sock;
 	}
 	
-	public void sendMapleJuicePacket(Socket socket) {
+	public void sendMapleJuicePacket(Socket socket) throws ConnectException {
 		try {
 			WriteLog.writelog(Machine.stName, "Initiating Sending of  MapleJuicePayload (TaskStatus) as response on the recieved socket ");
 		} catch (IOException e) {

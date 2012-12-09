@@ -50,7 +50,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 			if (!machine.myFileList.contains(fileInfo)/* && ! (new File(fileInfo).isFile())*/) {
 				machine.FileReplicator.sendSDFSGetMessage(fileInfo);
 			}
-			//machine.FileReplicator.sendSDFSGetMessage(fileInfo);
+			machine.FileReplicator.sendSDFSGetMessage(fileInfo);
 		}
 		//TODO : Synchronization
 		HashMap<String, Process> processList = new HashMap<String, Process>();
