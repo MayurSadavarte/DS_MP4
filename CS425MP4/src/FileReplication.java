@@ -291,9 +291,15 @@ public class FileReplication implements Runnable {
 							}
 						}
 					}
-					if(targetNode == null)
+					if(targetNode == null) {
+						try {
+							WriteLog.writelog(m.myName, "Couldn't find the GoodNode for re-replicating the file, hence moving to the next file!!");
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						break;
-
+					}
 					/*Vector<String> msgList=new Vector<String>();
 					msgList.add("C");
 					msgList.add(tempKey);
@@ -337,7 +343,7 @@ public class FileReplication implements Runnable {
 		String lastKey = node_file_keys.get(lastIndex);  //TODO need to be sure about the maximum index value
 
 
-
+		
 		while(m.node_file_map.get(firstKey).size() < lowAvgFiles)
 		{
 			//have removed this 'm.node_file_map.get(lastIndex).size() > highAvgFiles' from the while condition
@@ -353,15 +359,20 @@ public class FileReplication implements Runnable {
 				Vector<String> nodeList = m.file_node_map.get(file);
 				for(String node: nodeList)
 				{
-					if(node != lastKey)
+					if(node != lastKey) {
 						nodetoCopyFrom = node;
-					break;
+						break;
+					}
 				}
 				break;
 			}
 			if (filetoCopy == null)
 			{
 				System.out.println("Couldn't find a file which can be replicated");
+				break;
+			}
+			if (nodetoCopyFrom == null) {
+				System.out.println("Couldn't find a node from which file can be re-replicated/balanced");
 				break;
 			}
 			/*
@@ -416,6 +427,8 @@ public class FileReplication implements Runnable {
 		}
 	}
 
+	
+	
 	private Vector<String> sort_checkReplies()
 	{
 		Vector<String> keys = new Vector<String>(checkReplies.keySet());
