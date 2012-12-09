@@ -185,12 +185,12 @@ public class FileReplication implements Runnable {
 				return (firstLength - secondLength);
 			}
 		});
-		try {
+		/*try {
 			WriteLog.writelog(m.myName, "sorted node_file_map - "+ keys.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		return keys;  //TODO need to verify that sorting on tempkeys actually affects also keys
 
 	}
@@ -314,7 +314,7 @@ public class FileReplication implements Runnable {
 
 		try {
 			WriteLog.writelog(m.myName, "balancefiles called, stage one done");
-			WriteLog.writelog(m.myName, "final file_node_keys - "+file_node_keys.toString());
+			//WriteLog.writelog(m.myName, "final file_node_keys - "+file_node_keys.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -403,7 +403,7 @@ public class FileReplication implements Runnable {
 		}	
 		try {
 			WriteLog.writelog(m.myName, "balancefiles called, stage two done ");
-			WriteLog.writelog(m.myName, "final node_file_keys - "+node_file_keys.toString());
+			//WriteLog.writelog(m.myName, "final node_file_keys - "+node_file_keys.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
