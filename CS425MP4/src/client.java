@@ -152,7 +152,7 @@ public class client {
 						putMsg = new Vector<String>();
 						
 						putMsg.add("P");
-						putMsg.add(dirname+filename);
+						putMsg.add(dirPath+filename);
 						putMsg.add("mj_"+filename);
 						putMsg.add(myName);
 						System.out.println("client sending "+putMsg+" to master");
