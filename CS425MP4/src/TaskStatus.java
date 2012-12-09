@@ -71,8 +71,7 @@ public class TaskStatus extends GenericPayload implements Serializable{
 				} catch (IOException c){
 					System.out.println("Send packet failed");
 				}
-				//for (Integer task_id: MapleJuiceListener.task_map.keySet()) {
-				//}
+
 			}
 		}
 	}

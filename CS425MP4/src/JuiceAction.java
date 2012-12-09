@@ -147,9 +147,24 @@ public class JuiceAction extends GenericPayload implements Serializable{
 				continue;
 			}
 		}
+		File directory = new File("./");  
+
+		File[] toBeDeleted = directory.listFiles(new FileFilter() {  
+			public boolean accept(File theFile) {  
+				if (theFile.isFile()) {  
+					return theFile.getName().contains("juice_inter"); 
+				}  
+				return false;  
+			}  
+		});  
+
+		System.out.println(Arrays.toString(toBeDeleted));  
+		for(File deletableFile:toBeDeleted){  
+			deletableFile.delete();  
+		}  
 		synchronized (MapleJuiceListener.task_map) {
 			MapleJuiceListener.task_map.remove(juiceTaskId);
 		}
-		
+
 	}
 }
