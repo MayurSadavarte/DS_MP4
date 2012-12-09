@@ -25,7 +25,7 @@ public class MasterRecoveryClient {
 		for(String member: machine.memberList) {
 			
 			try {
-				sock = new Socket(member, Machine.MAPLE_JUICE_PORT);
+				sock = new Socket(member, Machine.MASTER_RECOVERY_PORT);
 				//responseRequired = false;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
