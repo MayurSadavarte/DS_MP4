@@ -752,13 +752,13 @@ public class FileReplication implements Runnable {
 	
 					}
 					else {
-						try {
+						/*try {
 							//WriteLog.writelog(m.myName, "received COPY, will now start FileTransferClient");
 							WriteLog.writelog(m.myName, "myFileList before COPY - "+m.myFileList.toString());
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						}
+						}*/
 
 						Runnable runnableClient = new FileTransferClient(m, copyFN, recvList.elementAt(1), serverIP);
 						Thread thread = new Thread(runnableClient);
