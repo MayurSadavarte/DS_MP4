@@ -4,7 +4,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 
- public class TaskStatus extends GenericPayload implements Serializable{
+public class TaskStatus extends GenericPayload implements Serializable{
 
 	/**
 	 * 
@@ -12,7 +12,7 @@ import java.util.HashMap;
 	private static final long serialVersionUID = -220435675068678063L;
 	String messageType;
 	int taskId;
-	
+
 	HashMap<String, String> taskStatus;
 	public void processPayload(Socket socket) {
 		try {
@@ -29,31 +29,36 @@ import java.util.HashMap;
 				e1.printStackTrace();
 			}
 			TaskStatus response = new TaskStatus();
-		   	response.messageType = new String("response");
-		   	response.taskStatus = new HashMap<String, String>();
-		   	if (MapleJuiceListener.task_map.containsKey(new Integer(taskId))) {
-		   		boolean all_done= true;
-		   		HashMap <String, Process> temp = MapleJuiceListener.task_map.get(taskId);
-		   		String taskState = null;
-		   		for (String fileName : temp.keySet()) {
-		   			Process tempProcess = temp.get(fileName);		   			
-		   			try {
-		   			    int val = tempProcess.exitValue();
-		   			    if (val == 0) {
-		   			    	taskState = new String("Success");
-		   			    }else {
-		   			    	taskState = new String("Failed");
-		   			    }
-		   				response.taskStatus.put(fileName, taskState);
-		   			}catch (IllegalThreadStateException a){
-		   				response.taskStatus.put(fileName, "In progress");
-		   				all_done = false;
-		   			}
-		   		}
-		   		if (all_done) {
-		   			MapleJuiceListener.task_map.remove(taskId);
-		   		}
-		   	
+			response.messageType = new String("response");
+			response.taskStatus = new HashMap<String, String>();
+			if (MapleJuiceListener.task_map.containsKey(new Integer(taskId))) {
+				boolean all_done= true;
+				HashMap <String, Process> temp = MapleJuiceListener.task_map.get(taskId);
+				String taskState = null;
+				for (String fileName : temp.keySet()) {
+					Process tempProcess = temp.get(fileName);		   			
+					try {
+						if (tempProcess == null) {
+							taskState = new String("To be scheduled");
+						}else {
+							int val = tempProcess.exitValue();
+							if (val == 0) {
+								taskState = new String("Success");
+							}else {
+								taskState = new String("Failed");
+							}
+						}
+						response.taskStatus.put(fileName, taskState);
+
+					}catch (IllegalThreadStateException a){
+						response.taskStatus.put(fileName, "In progress");
+						all_done = false;
+					}
+				}
+				if (all_done) {
+					MapleJuiceListener.task_map.remove(taskId);
+				}
+
 			}
 			MapleJuicePayload statusResponse = new MapleJuicePayload("TaskStatus"); 
 			statusResponse.setByteArray(response);
@@ -63,6 +68,6 @@ import java.util.HashMap;
 			//}
 		}
 	}
-	
+
 
 }
