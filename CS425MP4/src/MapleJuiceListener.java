@@ -288,9 +288,10 @@ public class MapleJuiceListener implements Runnable {
 			status.taskId = task_id;
 			status.messageType = new String("get");
 			//Monitor the progress on the node every 10 seconds
-			tasksComplete = true;
+			
 			synchronized(master_task_map) {
 				Vector<String> keyset = new Vector<String>(master_task_map.keySet());
+				tasksComplete = true;
 				for (String nodeName : keyset) {
 
 					MapleJuicePayload mj_payload = new MapleJuicePayload("TaskStatus");
@@ -325,6 +326,7 @@ public class MapleJuiceListener implements Runnable {
 						//tasksComplete = true;
 						juicesCompletedOnNode = true;
 					}
+					
 					for (String fileName : receivedStatus.taskStatus.keySet())
 					{
 						try {
