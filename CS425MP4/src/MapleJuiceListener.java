@@ -45,8 +45,13 @@ public class MapleJuiceListener implements Runnable {
 				for (String filesToBeRescheduled :  files) {
 					pendingFileList.add(filesToBeRescheduled);
 				}
+				master_task_map.remove(nodeName);
 			}
-			master_task_map.remove(nodeName);
+			
+			if (freeNodeList.contains(nodeName)) {
+				freeNodeList.remove(nodeName);
+			}
+
 		}
 		try {
 			WriteLog.writelog(m.myName, "Pending File List after addition : " + pendingFileList);
@@ -119,6 +124,12 @@ public class MapleJuiceListener implements Runnable {
 				}
 
 			}
+			try {
+				Thread.sleep(10 * 1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			TaskStatus status = new TaskStatus();
 			status.taskId = task_id;
@@ -151,12 +162,19 @@ public class MapleJuiceListener implements Runnable {
 					}
 					//Print the obtained results
 					boolean mapsCompletedOnNode = false;
-					System.out.println("Status on node " + nodeName +  " :");
+					try {
+						WriteLog.writelog(m.myName, "Status on node " + nodeName +  " :");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					if (receivedStatus.taskStatus.keySet().size() > 0) {
-						//tasksComplete = true;
-						mapsCompletedOnNode = true;
-					}else {
 						tasksComplete = false;
+						//mapsCompletedOnNode = true;
+					}else {
+						freeNodeList.add(nodeName);
+						master_task_map.remove(nodeName);
+						
 					}
 					for (String fileName : receivedStatus.taskStatus.keySet())
 					{
@@ -167,29 +185,24 @@ public class MapleJuiceListener implements Runnable {
 							e.printStackTrace();
 						}
 						if (receivedStatus.taskStatus.get(fileName).equals("In progress")) {
-							mapsCompletedOnNode = false;
-							tasksComplete = false;
+							//mapsCompletedOnNode = false;
+							//tasksComplete = false;
 						}else if (receivedStatus.taskStatus.get(fileName).equals("Failed")) {
 							pendingFileList.add(fileName);
 						}
 					}
-					if (mapsCompletedOnNode) {
+					/*if (mapsCompletedOnNode) {
 						freeNodeList.add(nodeName);
 						master_task_map.remove(nodeName);
-					}
+					}*/
 
 
 				}
 			}
-			try {
-				Thread.sleep(10 * 1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
 		}while(!tasksComplete || (pendingFileList != null && pendingFileList.size() > 0));
 
-
+        System.out.println("Maple Completed succesfully on all input files");
 
 	}
 
@@ -293,7 +306,12 @@ public class MapleJuiceListener implements Runnable {
 			status.taskId = task_id;
 			status.messageType = new String("get");
 			//Monitor the progress on the node every 10 seconds
-			
+			try {
+				Thread.sleep(10 * 1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			synchronized(master_task_map) {
 				Vector<String> keyset = new Vector<String>(master_task_map.keySet());
 				tasksComplete = true;
@@ -328,8 +346,11 @@ public class MapleJuiceListener implements Runnable {
 						e.printStackTrace();
 					}
 					if (receivedStatus.taskStatus.keySet().size() > 0) {
-						//tasksComplete = true;
-						juicesCompletedOnNode = true;
+						tasksComplete = false;
+						//juicesCompletedOnNode = true;
+					}else {
+						freeNodeList.add(nodeName);
+						master_task_map.remove(nodeName);
 					}
 					
 					for (String fileName : receivedStatus.taskStatus.keySet())
@@ -341,27 +362,23 @@ public class MapleJuiceListener implements Runnable {
 							e.printStackTrace();
 						}
 						if (receivedStatus.taskStatus.get(fileName).equals("In progress")) {
-							juicesCompletedOnNode = false;
-							tasksComplete = false;
+							//juicesCompletedOnNode = false;
+							//tasksComplete = false;
 						}else if (receivedStatus.taskStatus.get(fileName).equals("Failed")) {
 							pendingFileList.add(fileName);
 						}
 					}
-					if (juicesCompletedOnNode) {
+					/*if (juicesCompletedOnNode) {
 						freeNodeList.add(nodeName);
 						master_task_map.remove(nodeName);
-					}
+					}*/
 
 
 				}
 			}
-			try {
-				Thread.sleep(10 * 1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
 		}while(!tasksComplete || (pendingFileList != null && pendingFileList.size() > 0));
+		System.out.println("Juice Completed succesfully on all key files");
 
 	}
 

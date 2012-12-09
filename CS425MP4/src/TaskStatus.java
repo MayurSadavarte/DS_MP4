@@ -58,11 +58,11 @@ public class TaskStatus extends GenericPayload implements Serializable{
 							all_done = false;
 						}
 					}
-					if (all_done) {
+					/*if (all_done) {
 						MapleJuiceListener.task_map.remove(taskId);
-					}
+					}*/
 
-				}
+				} 
 				MapleJuicePayload statusResponse = new MapleJuicePayload("TaskStatus"); 
 				statusResponse.setByteArray(response);
 				System.out.println("%%%%%%%%%%%%%%%%%%%%%%  " + statusResponse.messageType + "&&&&&&&&&&&&&&&&  " + statusResponse.payload.toString() + "\n");

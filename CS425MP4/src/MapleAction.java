@@ -166,5 +166,8 @@ public class MapleAction extends GenericPayload implements Serializable{
 				continue;
 			}
 		}
+		synchronized (MapleJuiceListener.task_map) {
+			MapleJuiceListener.task_map.remove(mapleTaskId);
+		}
 	}
 }
