@@ -8,7 +8,7 @@ public class MapleJuiceClient {
 	boolean ResponseRequired;
 	//String myName;
 
-	public MapleJuiceClient(MapleJuicePayload payload, String target, boolean responseRequired) throws ConnectException {
+	public MapleJuiceClient(MapleJuicePayload payload, String target, boolean responseRequired) throws IOException {
 		this.target = target;
 		this.payload = payload;
 		sock = null;
@@ -20,14 +20,14 @@ public class MapleJuiceClient {
 				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			};*/
-
-			try {
-				sock = new Socket(target, Machine.MAPLE_JUICE_PORT);
+			sock = new Socket(target, Machine.MAPLE_JUICE_PORT);
+			/*try {
+				
 				//responseRequired = false;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 			System.out.println("Connecting...");
 		}
 	}
@@ -41,7 +41,7 @@ public class MapleJuiceClient {
 
 
 
-	public void send() throws ConnectException {
+	public void send() throws IOException {
 
 		try {
 			WriteLog.writelog(Machine.stName, "Sending mapleJuicePayload to : " + target);
@@ -53,16 +53,16 @@ public class MapleJuiceClient {
 
 		ObjectOutputStream oos = null;
 		OutputStream som = null;
-		try {
+		//try {
 			som = sock.getOutputStream();
 			oos = new ObjectOutputStream(som);
 			System.out.println("******\n" + payload.messageType + "\n" + payload.payload.toString() + "\n*******\n");
 			oos.writeObject(this.payload);
 			//oos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
-		finally {
+		//} catch (IOException e) {
+			//e.printStackTrace();
+		//}	
+		//finally {
 			if (!ResponseRequired) {
 				if(oos != null)
 					try {
@@ -88,7 +88,7 @@ public class MapleJuiceClient {
 				} 
 			}
 
-		}
+		//}
 
 
 	}
