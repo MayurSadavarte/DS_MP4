@@ -38,11 +38,13 @@ public class JuiceAction extends GenericPayload implements Serializable{
 		}
 		//TODO : Synchronization
 		HashMap<String, Process> processList = new HashMap<String, Process>();
+		int i =0;
 
 		for (String juiceInputFile : juiceInputFileList) {
+
 			Process juiceProcess;
 			try {
-
+				i++;
 				juiceProcess = Runtime.getRuntime().exec("java -jar " + juiceExe + " " + juiceInputFile + " " + juiceTaskId);
 				processList.put(juiceInputFile, juiceProcess);
 			} catch (IOException e) {
@@ -50,11 +52,37 @@ public class JuiceAction extends GenericPayload implements Serializable{
 				e.printStackTrace();
 			}
 
+			if ((i % 50) == 0) {
+				for (String juiceFile  : processList.keySet()) {
+					try {
+						Process process = processList.get(juiceFile);
+						i++;
+						process.waitFor();
+						int result = process.exitValue();
+						WriteLog.writelog(machine.myName, "Juice Task  " + juiceInputFile + "exited with code " + result);
+
+						if(result == 0) { //If process exited successfully
+
+						}else {
+							//Do nothing.
+						}
+
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			processList.clear();
 		}
-		
+
+
 		//TODO : the task_map will contain the IDs of the juice task they executed. Now we don't need them. 
 		//Needs to be removed
-		MapleJuiceListener.task_map.put(new Integer(juiceTaskId), new HashMap<String, Process>(processList));
+		/*MapleJuiceListener.task_map.put(new Integer(juiceTaskId), new HashMap<String, Process>(processList));
 		int index = 0;
 		for (String juiceInputFile  : processList.keySet()) {
 			try {
@@ -63,13 +91,13 @@ public class JuiceAction extends GenericPayload implements Serializable{
 				process.waitFor();
 				int result = process.exitValue();
 				WriteLog.writelog(machine.myName, "Juice Task  " + juiceInputFile + "exited with code " + result);
-				
+
 				if(result == 0) { //If process exited successfully
-					
+
 				}else {
 					//Do nothing.
 				}
-				
+
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -77,24 +105,24 @@ public class JuiceAction extends GenericPayload implements Serializable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		
+		}*/
+
 		String path = ".";
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
 		Pattern pattern = Pattern.compile("juice_inter_" + juiceTaskId);
-		
+
 		for(File file : listOfFiles) {
 			Matcher matcher = pattern.matcher(file.getName());						
 			if(matcher.find()) {
-				
+
 				try {
 					WriteLog.writelog(machine.myName, "Sending PUT msg for file " + file.getName());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 				machine.FileReplicator.sendSDFSPutMessage(file.getName(), juiceOutputFile, true);
 				matcher.reset();
 				try {

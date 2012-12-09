@@ -70,7 +70,7 @@ public class MapleJuicePayload implements Serializable{
 					TaskStatus status = (TaskStatus)oos.readObject();
 					generic_action=(GenericPayload)status;
 					//TODO multiple packet formats will come here
-				}	else if(messageType.equalsIgnoreCase("JuiceTask")) {
+				} else if(messageType.equalsIgnoreCase("JuiceTask")) {
 					JuiceAction juice_action  = (JuiceAction)oos.readObject();
 					juice_action.printContents();
 					generic_action=(GenericPayload)juice_action;
