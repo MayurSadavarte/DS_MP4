@@ -48,7 +48,7 @@ public class MapleJuiceListener implements Runnable {
 				master_task_map.remove(nodeName);
 			}
 			
-			if (freeNodeList.contains(nodeName)) {
+			if (freeNodeList != null && freeNodeList.contains(nodeName)) {
 				freeNodeList.remove(nodeName);
 			}
 
