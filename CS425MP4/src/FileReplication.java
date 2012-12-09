@@ -303,6 +303,12 @@ public class FileReplication implements Runnable {
 					sendListMsg(msgList, targetNode);
 					 */
 					sendCOPYMessage(targetNode, tempKey, tempKey, nodeList.firstElement());
+					try {
+						Thread.sleep(100);
+					} catch(InterruptedException e) {
+						e.printStackTrace();
+					}
+					
 					m.file_node_map.get(tempKey).add(targetNode);
 					m.node_file_map.get(targetNode).add(tempKey);
 
