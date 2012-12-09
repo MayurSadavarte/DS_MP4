@@ -59,6 +59,11 @@ public class MapleJuiceThread implements Runnable {
 			generic_action = mjPayload.parseByteArray();
 			status = (TaskStatus)generic_action;
 			status.processPayload(sock);
+		}else if (mjPayload.messageType.equalsIgnoreCase("JuiceTask")) {
+			JuiceAction juice_action=null;
+			generic_action = mjPayload.parseByteArray();
+			juice_action = (JuiceAction)generic_action;
+			((JuiceAction)juice_action).processJuiceActionPayload(machine);
 		}
 		//ois.close();
 
