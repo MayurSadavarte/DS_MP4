@@ -49,11 +49,12 @@ public class MapleJuiceListener implements Runnable {
 					pendingFileList.add(filesToBeRescheduled);
 				}
 				master_task_map.remove(nodeName);
+				if (freeNodeList != null && freeNodeList.contains(nodeName)) {
+					freeNodeList.remove(nodeName);
+				}
 			}
 			
-			if (freeNodeList != null && freeNodeList.contains(nodeName)) {
-				freeNodeList.remove(nodeName);
-			}
+
 
 		}
 		try {
