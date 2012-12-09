@@ -42,6 +42,7 @@ public class TaskStatus extends GenericPayload implements Serializable{
 						try {
 							if (tempProcess == null) {
 								taskState = new String("To be scheduled");
+								all_done = false;
 							}else {
 								int val = tempProcess.exitValue();
 								if (val == 0) {
