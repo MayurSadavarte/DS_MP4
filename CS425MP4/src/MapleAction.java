@@ -29,11 +29,13 @@ public class MapleAction extends GenericPayload implements Serializable{
 	}
 	public void processMapleActionPayload(Machine machine) {
 		HashMap<String, Process> temp2 = new HashMap<String, Process>();
-		
+
 		for (String mapleInputFile : inputFileInfo) {
 			temp2.put(mapleInputFile, (Process)null);
 		}
-		MapleJuiceListener.task_map.put(new Integer(mapleTaskId), new HashMap<String, Process>(temp2));
+		synchronized (MapleJuiceListener.task_map) {
+			MapleJuiceListener.task_map.put(new Integer(mapleTaskId), new HashMap<String, Process>(temp2));
+		}
 		try {
 			WriteLog.writelog(machine.myName, "Received Maple Task Payload");
 		} catch (IOException e1) {
@@ -59,8 +61,11 @@ public class MapleAction extends GenericPayload implements Serializable{
 				i ++;
 
 				temp = Runtime.getRuntime().exec("java -jar " + mapleExe + " " + fileInfo + " " + mapleTaskId);
-				MapleJuiceListener.task_map.get(mapleTaskId).remove(fileInfo);
-				MapleJuiceListener.task_map.get(mapleTaskId).put(fileInfo, temp);
+				//MapleJuiceListener.task_map.get(mapleTaskId).remove(fileInfo);
+				synchronized (MapleJuiceListener.task_map) {
+					MapleJuiceListener.task_map.get(mapleTaskId).put(fileInfo, temp);
+				}
+
 				processList.put(fileInfo, temp);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -72,7 +77,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 						Process temp1 = processList.get(fileName);
 						//index++;
 						temp1.waitFor();
-						
+
 						int result = temp1.exitValue();
 						WriteLog.writelog(machine.myName, "Maple Task  " + fileName + " exited with code " + result);
 

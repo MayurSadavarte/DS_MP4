@@ -160,7 +160,12 @@ public class MapleJuiceListener implements Runnable {
 					}
 					for (String fileName : receivedStatus.taskStatus.keySet())
 					{
-						System.out.println("Filename : " + fileName + " Status : " + receivedStatus.taskStatus.get(fileName));
+						try {
+							WriteLog.writelog(m.myName, "Filename : " + fileName + " Status : " + receivedStatus.taskStatus.get(fileName));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						if (receivedStatus.taskStatus.get(fileName).equals("In progress")) {
 							mapsCompletedOnNode = false;
 							tasksComplete = false;
