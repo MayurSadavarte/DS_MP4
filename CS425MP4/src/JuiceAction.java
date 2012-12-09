@@ -82,7 +82,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 
 		//TODO : the task_map will contain the IDs of the juice task they executed. Now we don't need them. 
 		//Needs to be removed
-		/*MapleJuiceListener.task_map.put(new Integer(juiceTaskId), new HashMap<String, Process>(processList));
+		MapleJuiceListener.task_map.put(new Integer(juiceTaskId), new HashMap<String, Process>(processList));
 		int index = 0;
 		for (String juiceInputFile  : processList.keySet()) {
 			try {
@@ -105,7 +105,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}*/
+		}
 
 		String path = ".";
 		File folder = new File(path);
