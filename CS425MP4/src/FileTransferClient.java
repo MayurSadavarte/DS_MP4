@@ -154,12 +154,12 @@ public class FileTransferClient implements Runnable {
 			
 			if(machine!=null) {
 				machine.myFileList.add(copyFN);
-				try {
+				/*try {
 					WriteLog.writelog(machine.myName, "myFileList after COPY - "+machine.myFileList.toString());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				}*/
 			}
 			//this.notifyAll();
 			//this.notify();
