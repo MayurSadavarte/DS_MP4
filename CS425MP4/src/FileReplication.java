@@ -289,7 +289,9 @@ public class FileReplication implements Runnable {
 								targetNode = tmpIndex;
 								break;
 							}
+							
 						}
+						break;
 					}
 					if(targetNode == null) {
 						try {
@@ -308,6 +310,12 @@ public class FileReplication implements Runnable {
 
 					sendListMsg(msgList, targetNode);
 					 */
+					try {
+						WriteLog.writelog(m.myName, "balancefiles: sending copy message in stage one");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					sendCOPYMessage(targetNode, tempKey, tempKey, nodeList.firstElement());
 					try {
 						Thread.sleep(100);
@@ -326,7 +334,7 @@ public class FileReplication implements Runnable {
 
 		try {
 			WriteLog.writelog(m.myName, "balancefiles called, stage one done");
-			//WriteLog.writelog(m.myName, "final file_node_keys - "+file_node_keys.toString());
+			WriteLog.writelog(m.myName, "final file_node_keys - "+file_node_keys.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
