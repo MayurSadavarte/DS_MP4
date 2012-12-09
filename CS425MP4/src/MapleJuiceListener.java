@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import failureDetection_Membership.WriteLog;
+
 
 public class MapleJuiceListener implements Runnable {
 
@@ -313,14 +315,24 @@ public class MapleJuiceListener implements Runnable {
 					}
 					//Print the obtained results
 					boolean juicesCompletedOnNode = false;
-					System.out.println("Status on node " + nodeName +  " :");
+					try {
+						WriteLog.writelog(m.myName, "Status on node " + nodeName +  " :");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if (receivedStatus.taskStatus.keySet().size() > 0) {
 						//tasksComplete = true;
 						juicesCompletedOnNode = true;
 					}
 					for (String fileName : receivedStatus.taskStatus.keySet())
 					{
-						System.out.println("Filename : " + fileName + " Status : " + receivedStatus.taskStatus.get(fileName));
+						try {
+							WriteLog.writelog(m.myName, "Filename : " + fileName + " Status : " + receivedStatus.taskStatus.get(fileName));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						if (receivedStatus.taskStatus.get(fileName).equals("In progress")) {
 							juicesCompletedOnNode = false;
 							tasksComplete = false;
