@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.HashMap;
 
@@ -66,7 +67,11 @@ public class TaskStatus extends GenericPayload implements Serializable{
 				MapleJuicePayload statusResponse = new MapleJuicePayload("TaskStatus"); 
 				statusResponse.setByteArray(response);
 				System.out.println("%%%%%%%%%%%%%%%%%%%%%%  " + statusResponse.messageType + "&&&&&&&&&&&&&&&&  " + statusResponse.payload.toString() + "\n");
+				try {
 				statusResponse.sendMapleJuicePacket(socket);
+				} catch (ConnectException c){
+					System.out.println("Send packet failed");
+				}
 				//for (Integer task_id: MapleJuiceListener.task_map.keySet()) {
 				//}
 			}
