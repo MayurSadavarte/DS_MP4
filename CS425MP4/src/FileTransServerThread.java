@@ -54,6 +54,7 @@ public class FileTransServerThread implements Runnable {
 				while(!machine.myFileList.contains(sourceFN));
 			}
 
+			WriteLog.writelog(machine.myName, "File "+sourceFN+" exists with the node, hence copying can go ahead!!");
 			File myFile = new File (sourceFN);
 			long flength = (long)myFile.length();
 			int current=0, bytesWritten=0;

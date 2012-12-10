@@ -145,7 +145,7 @@ public class FileTransferClient implements Runnable {
 			}
 
 			try {
-				WriteLog.writelog(Machine.stName, " thread: file transfer completed");
+				WriteLog.writelog(Machine.stName, " thread: file transfer completed for: "+copyFN);
 			} catch (IOException e3) {
 				// TODO Auto-generated catch block
 				e3.printStackTrace();
