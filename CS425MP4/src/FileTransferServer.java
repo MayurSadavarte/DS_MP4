@@ -2,11 +2,19 @@ import java.net.*;
 import java.io.*;
 
 public class FileTransferServer implements Runnable {
-	
+	Machine machine = null;
 	ServerSocket fservSock = null;
 	DataInputStream is;
 	DataOutputStream os;
 	Socket fclientSock = null;
+	
+	public FileTransferServer() {
+		
+	}
+	
+	public FileTransferServer(Machine m) {
+		machine = m;
+	}
 	
 	public void start()
 	{
@@ -61,9 +69,13 @@ public class FileTransferServer implements Runnable {
 			      System.out.println("Accepted connection : " + sock);
 			      
 			      
-			      
-			      FileTransServerThread ftthread = new FileTransServerThread(sock);
-			      ftthread.start();
+			      if (machine == null) {
+			    	  FileTransServerThread ftthread = new FileTransServerThread(sock);
+			    	  ftthread.start();
+			      } else {
+			    	  FileTransServerThread ftthread = new FileTransServerThread(sock, machine);
+			    	  ftthread.start();
+			      }
 			      // sendfile
 			     
 			      
