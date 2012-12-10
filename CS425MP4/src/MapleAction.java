@@ -144,12 +144,13 @@ public class MapleAction extends GenericPayload implements Serializable{
 			if ((i % 50) == 0) {
 				for (String fileName  : processList.keySet()) {
 					try {
+						//System.out.println("Here");
 						Process temp1 = processList.get(fileName);
 						//index++;
 						temp1.waitFor();	
-						/*temp1.getInputStream().close();
+						temp1.getInputStream().close();
 						temp1.getOutputStream().close();
-						temp1.getErrorStream().close();*/
+						temp1.getErrorStream().close();
 
 						int result = temp1.exitValue();
 						WriteLog.writelog(machine.myName, "Maple Task  " + fileName + " exited with code " + result);
