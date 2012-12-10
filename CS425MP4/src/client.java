@@ -135,7 +135,7 @@ public class client {
 				
 				sendMsgToMaster(putMsg, masterIP);
 				try {
-					Thread.sleep(1 * 100);
+					Thread.sleep(1 * 300);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -158,7 +158,7 @@ public class client {
 						System.out.println("client sending "+putMsg+" to master");
 						sendMsgToMaster(putMsg, masterIP);
 						try {
-							Thread.sleep(1 * 100);
+							Thread.sleep(1 * 300);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

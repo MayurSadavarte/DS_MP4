@@ -30,7 +30,7 @@ public class HeartbeatReceiver implements Runnable {
 	//	System.out.println("in heartbeat receiver: will now try to receive hbeat!!");
 		
 		try {
-			m.heartbeat_sock.setSoTimeout(3000);
+			m.heartbeat_sock.setSoTimeout(8000);
 			recvPacket = new DatagramPacket(recvData,recvData.length);
 			
 			m.heartbeat_sock.receive(recvPacket);
