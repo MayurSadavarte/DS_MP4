@@ -206,8 +206,9 @@ public class MapleJuiceListener implements Runnable {
 					}*/
 
 					} catch (IOException c) {
-                          
+						tasksComplete = false;  
 						System.out.println(" Send failed durng monitoring");
+						
 					}
 					finally {
 
@@ -393,6 +394,7 @@ public class MapleJuiceListener implements Runnable {
 					}*/
 
                     }catch (IOException c) {
+                    	tasksComplete = false;
                     	System.out.println("Send Failed");
                     }
 				}

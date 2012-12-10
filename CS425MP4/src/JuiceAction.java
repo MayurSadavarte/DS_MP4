@@ -152,7 +152,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 		File[] toBeDeleted = directory.listFiles(new FileFilter() {  
 			public boolean accept(File theFile) {  
 				if (theFile.isFile()) {  
-					return theFile.getName().contains("juice_inter"); 
+					return theFile.getName().startsWith("juice_inter"); 
 				}  
 				return false;  
 			}  
