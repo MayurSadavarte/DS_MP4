@@ -50,7 +50,7 @@ public class FileTransServerThread implements Runnable {
 				e1.printStackTrace();
 			}
 
-			if(machine != null) {
+			if((machine != null) && (!sourceFN.startsWith("inter_") && (!sourceFN.startsWith("juice_inter_")))) {
 				while(!machine.myFileList.contains(sourceFN));
 			}
 
