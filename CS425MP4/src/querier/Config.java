@@ -25,13 +25,13 @@ public class Config {
 	}
 	private void addStats() {
 		ports.add(8888);
-		addrs.add("localhost");
+		addrs.add("192.17.11.31");
 		
-		ports.add(8887);
-		addrs.add("192.17.11.73");
+		ports.add(8888);
+		addrs.add("130.126.112.117");
 		
-		//ports.add(8886);
-		//addrs.add("192.17.254.81");
+		ports.add(8888);
+		addrs.add("130.126.112.148");
 		
 		//ports.add(9898);
 		//addrs.add("192.17.11.71");
