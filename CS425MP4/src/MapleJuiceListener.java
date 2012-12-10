@@ -293,7 +293,7 @@ public class MapleJuiceListener implements Runnable {
 				for (int z =0; z < freeNodeList.size(); z++) {
 					System.out.println(nodeFileList[z]);
 				}
-				for ( j = 0 ; ((j < freeNodeList.size()) && (nodeFileList[j].size() > 0)); j++) {
+				for ( j = 0 ; ((j < freeNodeList.size()) && (nodeFileList[j] !=null && nodeFileList[j].size() > 0)); j++) {
 					JuiceAction temp = new JuiceAction();
 					temp.juiceTaskId = task_id;
 					temp.machineId = j + 1;
