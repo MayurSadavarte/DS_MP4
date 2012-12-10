@@ -334,7 +334,7 @@ public class FileReplication implements Runnable {
 
 		try {
 			WriteLog.writelog(m.myName, "balancefiles called, stage one done");
-			WriteLog.writelog(m.myName, "final file_node_keys - "+file_node_keys.toString());
+			//WriteLog.writelog(m.myName, "final file_node_keys - "+file_node_keys.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -27,14 +27,13 @@ public class FileTransServerThread implements Runnable {
 	{
 		boolean success=true;
 		do {
-		try {
-		
-		Thread thread  = new Thread(this);		
-		thread.start();
-		} catch (OutOfMemoryError e) {
-			System.out.println("********************* Out of Memory Error ***************************");
-			success = false;
-		}
+			try {		
+				Thread thread  = new Thread(this);		
+				thread.start();
+			} catch (OutOfMemoryError e) {
+				System.out.println("********************* Out of Memory Error ***************************");
+				success = false;
+			}
 		} while(success == false);
 	}
 
