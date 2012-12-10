@@ -27,7 +27,33 @@ public class MapleAction extends GenericPayload implements Serializable{
 	{
 		System.out.println(mapleTaskId);
 	}
+	public static String convertStreamToStr(InputStream is) throws IOException {
+
+		if (is != null) {
+			Writer writer = new StringWriter();
+
+			char[] buffer = new char[1024];
+			try {
+				Reader reader = new BufferedReader(new InputStreamReader(is,
+						"UTF-8"));
+				int n;
+				while ((n = reader.read(buffer)) != -1) {
+					writer.write(buffer, 0, n);
+				}
+			} finally {
+				is.close();
+			}
+			return writer.toString();
+		}
+		else {
+			return "";
+		}
+	}
+
 	public void processMapleActionPayload(Machine machine) {
+		ProcessBuilder pb = new ProcessBuilder("lsof");
+		pb.redirectErrorStream(true);
+		boolean all_done;
 		HashMap<String, Process> temp2 = new HashMap<String, Process>();
 
 		for (String mapleInputFile : inputFileInfo) {
@@ -36,6 +62,49 @@ public class MapleAction extends GenericPayload implements Serializable{
 		synchronized (MapleJuiceListener.task_map) {
 			MapleJuiceListener.task_map.put(new Integer(mapleTaskId), new HashMap<String, Process>(temp2));
 		}
+		/*do {
+			all_done = true;
+			try {
+				Process shell = pb.start();
+
+
+
+				// To capture output from the shell
+				InputStream shellIn = shell.getInputStream();
+
+				// Wait for the shell to finish and get the return code
+				int shellExitStatus = shell.waitFor();
+				//System.out.println("Exit status" + shellExitStatus);
+
+				String response = convertStreamToStr(shellIn);
+
+				shellIn.close();
+				File directory = new File("./");
+				File[] toBeDeleted = directory.listFiles(new FileFilter() {  
+					public boolean accept(File theFile) {  
+						if (theFile.isFile()) {  
+							return theFile.getName().startsWith("inter_"); 
+						}  
+						return false;  
+					}  
+				});  
+
+				//System.out.println(Arrays.toString(toBeDeleted));  
+				for(File deletableFile:toBeDeleted){  
+					if (response.contains(" " + deletableFile + " ") == false)
+						deletableFile.delete();
+					else {
+						all_done = false;
+					}
+				} 
+			}catch (InterruptedException i) {
+
+			}catch (IOException e) {
+
+			}
+		}while (all_done == false);*/
+		
+		
 		try {
 			WriteLog.writelog(machine.myName, "Received Maple Task Payload");
 		} catch (IOException e1) {
@@ -54,6 +123,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 		}
 		//TODO : Synchronization
 		HashMap<String, Process> processList = new HashMap<String, Process>();
+		System.out.println("********************************* Starting Maple Task *********************************************");
 		int i = 0;
 		for (String fileInfo : inputFileInfo) {
 			Process temp;
@@ -156,6 +226,12 @@ public class MapleAction extends GenericPayload implements Serializable{
 				}
 
 				machine.FileReplicator.sendSDFSPutMessage(file.getName(), newFileName , true);
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				matcher.reset();
 				try {
 					Thread.sleep(25);
@@ -166,20 +242,7 @@ public class MapleAction extends GenericPayload implements Serializable{
 				continue;
 			}
 		}
-		File directory = new File("./");
-		File[] toBeDeleted = directory.listFiles(new FileFilter() {  
-			public boolean accept(File theFile) {  
-				if (theFile.isFile()) {  
-					return theFile.getName().startsWith("inter_"); 
-				}  
-				return false;  
-			}  
-		});  
 
-		System.out.println(Arrays.toString(toBeDeleted));  
-		for(File deletableFile:toBeDeleted){  
-			deletableFile.delete();  
-		} 
 		synchronized (MapleJuiceListener.task_map) {
 			MapleJuiceListener.task_map.remove(mapleTaskId);
 		}

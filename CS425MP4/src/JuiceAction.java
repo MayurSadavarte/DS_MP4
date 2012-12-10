@@ -48,6 +48,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 
 		int i =0;
 		HashMap<String, Process> processList = new HashMap<String, Process>();
+		System.out.println("********************************* Starting Maple Task *********************************************");
 		for (String juiceInputFile : juiceInputFileList) {
 
 			Process juiceProcess;
@@ -147,7 +148,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 				continue;
 			}
 		}
-		File directory = new File("./");  
+		/*File directory = new File("./");  
 
 		File[] toBeDeleted = directory.listFiles(new FileFilter() {  
 			public boolean accept(File theFile) {  
@@ -164,7 +165,7 @@ public class JuiceAction extends GenericPayload implements Serializable{
 		}  
 		synchronized (MapleJuiceListener.task_map) {
 			MapleJuiceListener.task_map.remove(juiceTaskId);
-		}
+		}*/
 
 	}
 }
